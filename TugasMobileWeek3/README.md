@@ -100,7 +100,7 @@ Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jela
 
 >Terjadi error karena tipe data belum ditentukan pada variabel index dan increment tidak benar. Tambahkan int di depan index dan ++ pada index paling kanan agar tidak looping abadi. Hasil run di bawah ini
 
-![Image](/TugasMobileWeek3/IMG/Praktikum3langkah2.png)
+![Image](/TugasMobileWeek3/IMG/Praktikum3Langkah2.png)
 
 Error karena variabel index tidak dideklarasikan dengan tipe (misalnya int) dan increment hilang, menyebabkan infinite loop. Sintaks for di Dart: for (init; condition; increment). Perbaikan: for (int index = 10; index < 27; index++).
 
