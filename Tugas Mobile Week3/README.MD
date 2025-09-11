@@ -1,4 +1,12 @@
-# Praktikum langkah 2 dan 3 <br>
+# Praktikum 1 Langkah 2 dan 3 <br>
+
+Kode pada langkah 1 pertama hanya ingin print dari "test" dan outputnya adalah test2 dan test2 again. <br>
+
+Kode pada langkah 3 memang ada kesalahan dikarenakan deklarasi nama variable yang sama pada langkah sebelumnya perlu diganti ataupun dihapus kemudian pada error selanjutnya terdapat pada if (test).
+
+____________________________________________ <br><br>
+
+# Praktikum 2 langkah 2 dan 3 <br>
 
 Error pada langkah 1 tersebut adalah variabel counter belum dideklarasikan sebelum digunakan di dalam while. Pada Dart, variabel harus dideklarasikan terlebih dahulu, misalnya dengan int counter = 0; sebelum while.
 Jika counter belum dideklarasikan, maka akan muncul error "Undefined name 'counter'".
