@@ -63,7 +63,7 @@ Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jela
 
 >Terjadi error karena counter belum dideklarasi, maka dapat ditambahkan dulu. 'int counter = 0;'. Berikut adalah hasil dijalankan
 
-![Image](/TugasMobileWeek3/IMG/Praktikum2langkah2.png)
+![Image](/TugasMobileWeek3/IMG/Praktikum2Langkah2.png)
 
 Error karena variabel counter tidak didefinisikan sebelum digunakan. Di Dart, variabel harus dideklarasikan terlebih dahulu. Loop while mengecek kondisi di awal setiap iterasi; inisialisasi di luar loop memulai dari 0 hingga 32.
 
@@ -81,7 +81,7 @@ Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan d
 
 >Hasil run
 
-![Image](/TugasMobileWeek3/IMG/Praktikum2langkah3.png)
+![Image](/TugasMobileWeek3/IMG/Praktikum2Langkah3.png)
 
 Kode akan mencetak nilai counter mulai dari nilai terakhir counter setelah while sebelumnya (yaitu 33), lalu terus bertambah dan mencetak hingga counter mencapai 76. Loop do-while menjalankan blok kode setidaknya sekali sebelum mengecek kondisi.
 
@@ -117,7 +117,7 @@ print(index);
 
 >Ubah logika or menjadi and agar looping dapat tampil angka index
 
-![Image](/TugasMobileWeek3/IMG/Praktikum3langkah3.png)
+![Image](/TugasMobileWeek3/IMG/Praktikum3Langkah3.png)
 
 Kondisi OR (||) menyebabkan hampir semua iterasi di-skip karena index mulai dari 10 (>1). Ubah ke AND (&&) untuk skip hanya iterasi di mana index >1 DAN <7 (tidak relevan di range 10-26). Break hentikan loop di 21; continue skip iterasi saat kondisi benar.
 
