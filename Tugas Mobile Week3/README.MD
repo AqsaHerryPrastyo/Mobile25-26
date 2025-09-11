@@ -13,3 +13,19 @@ Jika counter belum dideklarasikan, maka akan muncul error "Undefined name 'count
 Solusi: Tambahkan deklarasi variabel counter sebelum while, misal: int counter = 0;<br>
 
 Pada langkah 3 tidak terjadi error, Kode  akan mencetak nilai counter mulai dari nilai terakhir counter setelah while sebelumnya (yaitu 33), lalu terus bertambah dan mencetak hingga counter mencapai 76. Setelah itu, perulangan berhenti.
+
+_____________________________________________ <br><br>
+
+# Praktikum 3 langkah 2 dan 3
+
+Pada langkah 1 error  terjadi karena:
+Variabel tidak konsisten penulisannya.
+Tidak ada deklarasi tipe data.
+Increment tidak benar. <br>
+
+Pada Langkah 3 terdapat error utama:
+Salah penulisan keyword (If, Else If).
+Salah penulisan variabel (Index vs index).
+Penempatan kode di luar loop.
+Logika kondisi yang tidak tepat.
+
