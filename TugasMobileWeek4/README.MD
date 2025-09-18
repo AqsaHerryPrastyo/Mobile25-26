@@ -41,3 +41,60 @@ Kode tersebut membuat list dengan panjang 5 berisi nilai `null`, lalu elemen pad
 
 
 ## Praktikum 2: Eksperimen Tipe Data Set
+### Langkah 1
+Ketik atau salin kode program berikut ke dalam fungsi main().
+~~~Dart
+var halogens = {'fluorine', 'chlorine', 'bromine', 'iodine', 'astatine'};
+print(halogens);
+~~~
+
+### Langkah 2
+Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak2,1.png)
+
+Ketika kode dijalankan, perintah print(halogens); akan menampilkan isi set ke konsol. Set di Dart adalah koleksi yang tidak memiliki urutan dan tidak mengizinkan duplikasi.
+
+### Langkah 3
+Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
+~~~Dart
+var names1 = <String>{};
+Set<String> names2 = {}; // This works, too.
+var names3 = {}; // Creates a map, not a set.
+
+print(names1);
+print(names2);
+print(names3);
+~~~
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak2,3.png)
+
+
+
+## Praktikum 3: Eksperimen Tipe Data Maps
+### Langkah 1
+Ketik atau salin kode program berikut ke dalam fungsi main().
+~~~Dart
+var gifts = {
+  // Key:    Value
+  'first': 'partridge',
+  'second': 'turtledoves',
+  'fifth': 1
+};
+
+var nobleGases = {
+  2: 'helium',
+  10: 'neon',
+  18: 2,
+};
+
+print(gifts);
+print(nobleGases);
+~~~
+
+### Langkah 2
+Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+>Hasil run
