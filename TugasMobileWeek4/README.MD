@@ -98,3 +98,32 @@ print(nobleGases);
 Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
 
 >Hasil run
+![image](/TugasMobileWeek4/IMG/Prak3,1.png)
+
+Kode dalam Dart tersebut mendefinisikan dua variabel bertipe Map: gifts dengan kunci String ('first', 'second', 'fifth') dan nilai campuran (String 'partridge', 'turtledoves', serta integer 1), serta nobleGases dengan kunci integer (2, 10, 18) dan nilai campuran (String 'helium', 'neon', serta integer 2); saat perintah print(gifts) dan print(nobleGases) dijalankan, Dart mencetak isi kedua map ke konsol dalam format {key1: value1, key2: value2, ...}, menghasilkan output {first: partridge, second: turtledoves, fifth: 1} dan {2: helium, 10: neon, 18: 2} secara berurutan, tanpa melakukan operasi lain selain mendefinisikan dan menampilkan isi map tersebut.
+
+### Langkah 3
+Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+var mhs1 = Map<String, String>();
+gifts['first'] = 'partridge';
+gifts['second'] = 'turtledoves';
+gifts['fifth'] = 'golden rings';
+
+var mhs2 = Map<int, String>();
+nobleGases[2] = 'helium';
+nobleGases[10] = 'neon';
+nobleGases[18] = 'argon';
+~~~
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak3,3.png)
+
+
+gifts (kunci String, nilai dynamic) dan nobleGases (kunci int, nilai dynamic), lalu mencetaknya, diikuti dengan penambahan kode yang membuat dua map baru, mhs1 (kunci dan nilai String, kosong) dan mhs2 (kunci int, nilai String, kosong), serta mengubah nilai pada gifts (fifth dari 1 ke 'golden rings') dan nobleGases (18 dari 2 ke 'argon') tanpa menyebabkan error karena tipe dynamic mendukung perubahan tersebut; output awal menunjukkan {first: partridge, second: turtledoves, fifth: 1} dan {2: helium, 10: neon, 18: 2}, sedangkan mhs1 dan mhs2 menghasilkan {} karena kosong, dan jika gifts serta nobleGases dicetak ulang setelah perubahan, outputnya menjadi {first: partridge, second: turtledoves, fifth: golden rings} dan {2: helium, 10: neon, 18: argon}.
+
+#### Tambahkan elemen nama dan NIM
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak3,33.png)
+
+
