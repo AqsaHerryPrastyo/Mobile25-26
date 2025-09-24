@@ -204,3 +204,76 @@ Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Jelaskan manfaat Collec
 
 
 Kode tersebut membuat list baru menggunakan **collection for**, di mana `listOfInts` berisi `[1, 2, 3]`, lalu `listOfStrings` dibentuk dengan menambahkan elemen tetap `'#0'` dan hasil perulangan `for (var i in listOfInts) '#$i'` sehingga menghasilkan `['#0', '#1', '#2', '#3']`; perintah `assert(listOfStrings[1] == '#1')` benar karena elemen indeks ke-1 adalah `'#1'`, dan saat dicetak tampil `[ #0, #1, #2, #3 ]`. Manfaat collection for adalah memudahkan pembuatan list secara ringkas dan deklaratif karena memungkinkan menggabungkan elemen statis dengan hasil perulangan langsung di dalam list literal tanpa harus menulis loop terpisah.
+
+
+## Praktikum 5: Eksperimen Tipe Data Records
+### Langkah 1
+Ketik atau salin kode program berikut ke dalam fungsi main().
+
+~~~Dart
+var record = ('first', a: 2, b: true, 'last');
+print(record)
+~~~
+
+### Langkah 2
+Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak5.png)
+
+Record dengan dua nilai positional ('first' dan 'last') serta dua nilai named (a: 2 dan b: true), namun saat dicetak hanya menampilkan ('first', a: 2, b: true) karena aturan Dart menyembunyikan positional field yang muncul setelah named field pada representasi string, meskipun nilainya tetap tersimpan dan dapat diakses menggunakan record.$2.
+
+### Langkah 3
+Tambahkan kode program berikut di luar scope void main(), lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+(int, int) tukar((int, int) record) {
+  var (a, b) = record;
+  return (b, a);
+}
+~~~
+
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Gunakan fungsi tukar() di dalam main() sehingga tampak jelas proses pertukaran value field di  dalam Records.
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak5,3.png)
+
+Kode tersebut mendefinisikan sebuah fungsi `tukar` yang menerima record `(int, int)` lalu menukar posisinya, tetapi dalam `main` nama `tukar` justru dipakai ulang sebagai variabel berisi record `('first', a: 2, b: true, 'last')`, sehingga fungsi `tukar` tidak dipanggil sama sekali dan hanya terjadi shadowing (penutupan nama fungsi oleh variabel dengan nama sama); akibatnya saat `print(tukar)` dieksekusi, yang dicetak adalah isi record tersebut, bukan hasil dari fungsi penukar.
+
+
+### Langkah 4
+Tambahkan kode program berikut di dalam scope void main(), lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+// Record type annotation in a variable declaration:
+(String, int) mahasiswa;
+print(mahasiswa);
+~~~
+
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Inisialisasi field nama dan NIM Anda pada variabel record mahasiswa di atas. Dokumentasikan hasilnya dan buat laporannya!
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak5,4.png)
+
+Kode (String, int) mahasiswa; mendeklarasikan variabel bernama mahasiswa dengan tipe “record” yang berisi dua bidang: String dan int. Ini adalah fitur Dart yang disebut “records,” yang memungkinkan Anda menggabungkan beberapa nilai dengan tipe yang berbeda menjadi satu.
+Baris berikutnya, mahasiswa = (‘Herry’, 2341720153);, menetapkan nilai ke mahasiswa—sebuah record di mana bidang pertama adalah string ‘Herry’ dan bidang kedua adalah integer 2341720153.
+print(mahasiswa); akan menampilkan catatan tersebut, menunjukkan kedua nilai yang digabungkan, misalnya: (Herry, 2341720153).
+
+### Langkah 5
+Tambahkan kode program berikut di dalam scope void main(), lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+var mahasiswa2 = ('first', a: 2, b: true, 'last');
+
+print(mahasiswa2.$1); // Prints 'first'
+print(mahasiswa2.a); // Prints 2
+print(mahasiswa2.b); // Prints true
+print(mahasiswa2.$2); // Prints 'last'
+~~~
+
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Gantilah salah satu isi record dengan nama dan NIM Anda, lalu dokumentasikan hasilnya dan buat laporannya!
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak5,5.png)
+
+Kode ini membuat sebuah record Dart bernama `mahasiswa2` yang menggabungkan bidang posisional dan bidang bernama: `first` dan `last` adalah bidang posisional yang diakses dengan `$1` dan `$2`, sementara `a: 2` dan `b: true` adalah bidang bernama yang diakses dengan `.a` dan `.b`. Pernyataan `print` menunjukkan cara mengambil setiap nilai dari record tersebut, memperlihatkan kemampuan Dart untuk menggabungkan bidang posisional dan bidang bernama dalam satu variabel dan mengaksesnya secara langsung.
