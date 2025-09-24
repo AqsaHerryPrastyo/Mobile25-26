@@ -277,3 +277,54 @@ Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Gantilah salah satu isi
 ![image](/TugasMobileWeek4/IMG/Prak5,5.png)
 
 Kode ini membuat sebuah record Dart bernama `mahasiswa2` yang menggabungkan bidang posisional dan bidang bernama: `first` dan `last` adalah bidang posisional yang diakses dengan `$1` dan `$2`, sementara `a: 2` dan `b: true` adalah bidang bernama yang diakses dengan `.a` dan `.b`. Pernyataan `print` menunjukkan cara mengambil setiap nilai dari record tersebut, memperlihatkan kemampuan Dart untuk menggabungkan bidang posisional dan bidang bernama dalam satu variabel dan mengaksesnya secara langsung.
+
+## Tugas Praktikum
+
+#### 1. Silakan selesaikan Praktikum 1 sampai 5, lalu dokumentasikan berupa screenshot hasil pekerjaan Anda beserta penjelasannya!
+
+#### 2. Jelaskan yang dimaksud Functions dalam bahasa Dart!
+>Functions adalah blok kode untuk menjalankan tugas tertentu dan bisa dipanggil berulang.
+
+#### 3. Jelaskan jenis-jenis parameter di Functions beserta contoh sintaksnya!
+>Positional: wajib urutan, Optional Positional: pakai [], Named: pakai {}.
+
+~~~Dart
+void greet({required String name, int age = 18}) {
+  print("Hello $name, umur $age");
+}
+~~~
+
+#### 4. Jelaskan maksud Functions sebagai first-class objects beserta contoh sintaknya!
+>functions diperlakukan sebagai objek kelas satu (first-class objects), artinya functions bisa disimpan dalam variabel, dikirim sebagai parameter, atau dikembalikan dari function lain.
+
+~~~Dart
+void halo(String n) => print("Hai $n");
+void main() {
+  var sapa = halo;
+  sapa("Dart");
+}
+~~~
+
+#### 5. Apa itu Anonymous Functions? Jelaskan dan berikan contohnya!
+>Fungsi tanpa nama, sering dipakai untuk callback.
+
+~~~Dart
+var list = [1, 2, 3];
+list.forEach((i) => print(i * 2));
+~~~
+
+#### 6. Jelaskan perbedaan Lexical scope dan Lexical closures! Berikan contohnya!
+>Lexical Scope vs Closures
+Scope: variabel bisa diakses dalam lingkupnya.
+Closure: fungsi mengingat variabel luar meski scope selesai.
+
+~~~Dart
+Function tambah(int n) => (int i) => n + i;
+~~~
+
+#### 7. Jelaskan dengan contoh cara membuat return multiple value di Functions!
+>Gunakan Record untuk mengembalikan banyak nilai.
+
+~~~Dart
+(int, int) hitung(int a, int b) => (a + b, a * b);
+~~~
