@@ -127,3 +127,80 @@ gifts (kunci String, nilai dynamic) dan nobleGases (kunci int, nilai dynamic), l
 ![image](/TugasMobileWeek4/IMG/Prak3,33.png)
 
 
+## Praktikum 4: Eksperimen Tipe Data List: Spread dan Control-flow Operators
+### Langkah 1: 
+Ketik atau salin kode program berikut ke dalam fungsi main().
+
+~~~Dart
+var list = [1, 2, 3];
+var list2 = [0, ...list];
+print(list1);
+print(list2);
+print(list2.length);
+~~~
+
+### Langkha 2:
+Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak4,1.png)
+
+variabel list1 tidak didefinisikan, sedangkan kode menggunakan list untuk mendefinisikan daftar [1, 2, 3].
+
+
+>Hasil perbaikan
+![image](/TugasMobileWeek4/IMG/Prak4,11.png)
+
+### Langkah 3 
+Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+list1 = [1, 2, null];
+print(list1);
+var list3 = [0, ...?list1];
+print(list3.length);
+~~~
+Tambahkan variabel list berisi NIM Anda menggunakan Spread Operators. Dokumentasikan hasilnya dan buat laporannya!
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak4,3.png)
+
+### Langkah 4
+Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+var nav = ['Home', 'Furniture', 'Plants', if (promoActive) 'Outlet'];
+print(nav);
+~~~
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Tunjukkan hasilnya jika variabel promoActive ketika true dan false.
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak4,4.png)
+
+### Langkah 5
+Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+var nav2 = ['Home', 'Furniture', 'Plants', if (login case 'Manager') 'Inventory'];
+print(nav2);
+~~~
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Tunjukkan hasilnya jika variabel login mempunyai kondisi lain.
+
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak4,5.png)
+
+### Langkah 6
+Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
+
+~~~Dart
+var listOfInts = [1, 2, 3];
+var listOfStrings = ['#0', for (var i in listOfInts) '#$i'];
+assert(listOfStrings[1] == '#1');
+print(listOfStrings);
+~~~
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Jelaskan manfaat Collection For dan dokumentasikan hasilnya.
+>Hasil run
+![image](/TugasMobileWeek4/IMG/Prak4,6.png)
+
+
+Kode tersebut membuat list baru menggunakan **collection for**, di mana `listOfInts` berisi `[1, 2, 3]`, lalu `listOfStrings` dibentuk dengan menambahkan elemen tetap `'#0'` dan hasil perulangan `for (var i in listOfInts) '#$i'` sehingga menghasilkan `['#0', '#1', '#2', '#3']`; perintah `assert(listOfStrings[1] == '#1')` benar karena elemen indeks ke-1 adalah `'#1'`, dan saat dicetak tampil `[ #0, #1, #2, #3 ]`. Manfaat collection for adalah memudahkan pembuatan list secara ringkas dan deklaratif karena memungkinkan menggabungkan elemen statis dengan hasil perulangan langsung di dalam list literal tanpa harus menulis loop terpisah.
