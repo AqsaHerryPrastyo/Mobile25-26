@@ -396,3 +396,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ### Function
 ![image](/W5/hello_world/img/fuction.gif)
 
+### Navigasi
+![image](/W5/hello_world/img/Navigasi.gif)
+
+
