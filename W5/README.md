@@ -17,12 +17,12 @@
 ## Praktikum 1: Membuat Project Flutter Baru
 
 >Hasil
-![image](/hellow_world/IMG/Prak1.png)
+![image](/hellow_world/img/Prak1.png)
 
 ##  Praktikum 2: Menghubungkan Perangkat Android atau Emulator
 
 >Hasil
-![image](/hellow_world/IMG/Prak2.gif)
+![image](/hellow_world/img/Prak2.gif)
 
 
 ## Praktikum 3: 
@@ -30,12 +30,12 @@
 ### Langkah 4
 
 >Hasil
-![image](/hellow_world/IMG/Prak3,4.png)
+![image](/hellow_world/img/Prak3,4.png)
 
 ### Langkah 11
 
 >Hasil
-![image](/hellow_world/IMG/Prak3,11.png)
+![image](/hellow_world/img/Prak3,11.png)
 
 ## Praktikum 4: Menerapkan Widget Dasar
 ### Langkah 1
@@ -59,7 +59,7 @@ class MyTextWidget extends StatelessWidget {
 ~~~
 
 >Hasil
-![image](/hello_world/IMG/Prak4,1.png)
+![image](/hello_world/img/Prak4,1.png)
 
 ### Langkah 2: Image Widget
 Buat sebuah file image_widget.dart di dalam folder basic_widgets dengan isi kode berikut.
@@ -204,3 +204,100 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 ~~~
+
+### Langkah 4: Dialog Widget
+Dialog widget pada flutter memiliki dua jenis dialog yaitu AlertDialog dan SimpleDialog.
+
+Ubah isi kode main.dart seperti berikut.
+
+~~~Dart
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        body: MyLayout(),
+      ),
+    );
+  }
+}
+
+class MyLayout extends StatelessWidget {
+  const MyLayout({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        child: const Text('Show alert'),
+        onPressed: () {
+          showAlertDialog(context);
+        },
+      ),
+    );
+  }
+}
+
+showAlertDialog(BuildContext context) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: const Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("My title"),
+    content: const Text("This is my message."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+~~~
+
+>Hasil run
+![image](/hello_world/img/Prak5,4.png)
+
+### Langkah 5: Input dan Selection Widget
+Flutter menyediakan widget yang dapat menerima input dari pengguna aplikasi yaitu antara lain Checkbox, Date and Time Pickers, Radio Button, Slider, Switch, TextField.
+
+Contoh penggunaan TextField widget adalah sebagai berikut:
+
+~~~Dart
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text("Contoh TextField")),
+        body: const TextField(
+          obscureText: false,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Nama',
+          ),
+        ),
+      ),
+    );
+  }
+}
+~~~
+
+>Hasil run
+![image](/hello_world/img/Prak5,5.png)
