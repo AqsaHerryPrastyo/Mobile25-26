@@ -392,3 +392,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### Prettier
 ![image](/W5/hello_world/img/Prettier.gif)
+
+### Function
+![image](/W5/hello_world/img/fuction.gif)
+
