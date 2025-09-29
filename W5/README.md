@@ -300,4 +300,4 @@ class MyApp extends StatelessWidget {
 ~~~
 
 >Hasil run
-![image](/hello_world/img/Prak5,5.png)
+![image](/W5/hello_world/img/Prak5,5.png)
