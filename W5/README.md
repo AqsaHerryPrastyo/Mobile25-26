@@ -399,4 +399,5 @@ class _MyHomePageState extends State<MyHomePage> {
 ### Navigasi
 ![image](/W5/hello_world/img/Navigasi.gif)
 
-
+### Favorites
+![image](/W5/hello_world/img/Favorites.gif)
