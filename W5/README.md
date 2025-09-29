@@ -17,12 +17,12 @@
 ## Praktikum 1: Membuat Project Flutter Baru
 
 >Hasil
-![image](/hellow_world/img/Prak1.png)
+![image](/W5/hellow_world/img/Prak1.png)
 
 ##  Praktikum 2: Menghubungkan Perangkat Android atau Emulator
 
 >Hasil
-![image](/hellow_world/img/Prak2.gif)
+![image](/W5/hellow_world/img/Prak2.gif)
 
 
 ## Praktikum 3: 
@@ -30,12 +30,12 @@
 ### Langkah 4
 
 >Hasil
-![image](/hellow_world/img/Prak3,4.png)
+![image](/W5/hellow_world/img/Prak3,4.png)
 
 ### Langkah 11
 
 >Hasil
-![image](/hellow_world/img/Prak3,11.png)
+![image](/W5/hellow_world/img/Prak3,11.png)
 
 ## Praktikum 4: Menerapkan Widget Dasar
 ### Langkah 1
@@ -59,7 +59,7 @@ class MyTextWidget extends StatelessWidget {
 ~~~
 
 >Hasil
-![image](/hello_world/img/Prak4,1.png)
+![image](/W5/hello_world/img/Prak4,1.png)
 
 ### Langkah 2: Image Widget
 Buat sebuah file image_widget.dart di dalam folder basic_widgets dengan isi kode berikut.
@@ -80,7 +80,7 @@ class MyImageWidget extends StatelessWidget {
 ~~~
 
 >hasil
-![image](/hello_world/img/Prak4,2.png)
+![image](/W5/hello_world/img/Prak4,2.png)
 
 ## Praktikum 5: Menerapkan Widget Material Design dan iOS Cupertino
 ### Langkah 1: Cupertino Button dan Loading Bar
@@ -270,7 +270,7 @@ showAlertDialog(BuildContext context) {
 ~~~
 
 >Hasil run
-![image](/hello_world/img/Prak5,4.png)
+![image](/W5/hello_world/img/Prak5,4.png)
 
 ### Langkah 5: Input dan Selection Widget
 Flutter menyediakan widget yang dapat menerima input dari pengguna aplikasi yaitu antara lain Checkbox, Date and Time Pickers, Radio Button, Slider, Switch, TextField.
@@ -301,3 +301,85 @@ class MyApp extends StatelessWidget {
 
 >Hasil run
 ![image](/W5/hello_world/img/Prak5,5.png)
+
+## Langkah 6: Date and Time Pickers
+Date and Time Pickers termasuk pada kategori input dan selection widget, berikut adalah contoh penggunaan Date and Time Pickers.
+
+~~~Dart
+import 'dart:async';
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Contoh Date Picker',
+      home: MyHomePage(title: 'Contoh Date Picker'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  // Variable/State untuk mengambil tanggal
+  DateTime selectedDate = DateTime.now();
+
+  //  Initial SelectDate FLutter
+  Future<void> _selectDate(BuildContext context) async {
+    // Initial DateTime FIinal Picked
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("${selectedDate.toLocal()}".split(' ')[0]),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              onPressed: () => {
+                _selectDate(context),
+                // ignore: avoid_print
+                print(selectedDate.day + selectedDate.month + selectedDate.year)
+              },
+              child: const Text('Pilih Tanggal'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+~~~
+
+>Hasil run
+![image](/W5/hello_world/img/Prak5,6.png)
