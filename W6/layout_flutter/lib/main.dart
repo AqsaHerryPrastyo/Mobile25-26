@@ -66,12 +66,7 @@ class MyApp extends StatelessWidget {
     Widget textSection = Container(
       padding: const EdgeInsets.all(32),
       child: const Text(
-        'Carilah teks di internet yang sesuai '
-        'dengan foto atau tempat wisata yang ingin '
-        'Anda tampilkan. '
-        'Tambahkan nama dan NIM Anda sebagai '
-        'identitas hasil pekerjaan Anda. '
-        'Selamat mengerjakan 🙂.',
+        'Foto gunung Bersalju',
         softWrap: true,
       ),
     );
@@ -83,8 +78,9 @@ class MyApp extends StatelessWidget {
           title: const Text('Flutter layout demo'),
           centerTitle: false,
         ),
-        body: Column(
+        body: ListView(
           children: [
+            Image.asset('img/snow.jpg', width: 600, height: 240, fit: BoxFit.cover),
             titleSection,
             buttonSection,
             textSection,

@@ -178,3 +178,34 @@ Dengan memberi nilai softWrap = true, baris teks akan memenuhi lebar kolom sebel
 
 ![image](/W6/layout_flutter/img/Prak3.png)
 
+## Praktikum 4: Implementasi image section
+
+### Langkah 1: Siapkan aset gambar
+Anda dapat mencari gambar di internet yang ingin ditampilkan. Buatlah folder images di root project layout_flutter. Masukkan file gambar tersebut ke folder images, lalu set nama file tersebut ke file pubspec.yaml seperti berikut:
+
+~~~Dart
+flutter: uses-material-design: true
+assets:
+- images/Lake.jpg
+~~~
+
+### Langkah 2: Tambahkan gambar ke body
+Tambahkan aset gambar ke dalam body seperti berikut:
+~~~Dart
+Image. asset(
+images/lake.jpg, width: 600, height: 240,
+fit: BoxFit.cover,
+),
+~~~
+BoxFit.cover memberi tahu kerangka kerja bahwa gambar harus sekecil mungkin tetapi menutupi seluruh kotak rendernya.
+
+### Langkah 3: Terakhir, ubah menjadi ListView
+Pada langkah terakhir ini, atur semua elemen dalam ListView, bukan Column, karena ListView mendukung scroll yang dinamis saat aplikasi dijalankan pada perangkat yang resolusinya lebih kecil.
+
+~~~Dart
+- body: Column
++ body: ListView
+~~~
+
+>Hasil
+![image](/W6/layout_flutter/img/Prak4.png)
