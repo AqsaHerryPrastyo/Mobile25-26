@@ -136,3 +136,45 @@ Widget buttonSection = Row(
   ],
 );
 ~~~
+>Hasil run
+![image](/W6/layout_flutter/img/Prak2,2.png)
+
+### Langkah 3: Tambah button section ke body
+Tambahkan variabel buttonSection ke dalam body seperti berikut:
+~~~Dart
+return MaterialApp( title: 'Flutter layout demo',
+home: Scaffold(|
+@@ -54,8 +65,9 Cg body: Column (
+children: [ titlesection,
+buttonSection,
+            ],
+        ),
+    ),
+);
+~~~
+
+>Kode
+![image](/W6/layout_flutter/img/Prak2,3.png)
+
+
+## Praktikum 3: Implementasi text section
+### Langkah 1: Buat widget textSection
+Tentukan bagian teks sebagai variabel. Masukkan teks ke dalam Container dan tambahkan padding di sepanjang setiap tepinya. Tambahkan kode berikut tepat di bawah deklarasi buttonSection:
+~~~Dart
+Widget textSection = Container(
+  padding: const EdgeInsets.all(32),
+  child: const Text(
+    'Carilah teks di internet yang sesuai '
+    'dengan foto atau tempat wisata yang ingin '
+    'Anda tampilkan. '
+    'Tambahkan nama dan NIM Anda sebagai '
+    'identitas hasil pekerjaan Anda. '
+    'Selamat mengerjakan 🙂.',
+    softWrap: true,
+  ),
+);
+~~~
+Dengan memberi nilai softWrap = true, baris teks akan memenuhi lebar kolom sebelum membungkusnya pada batas kata.
+
+![image](/W6/layout_flutter/img/Prak3.png)
+
