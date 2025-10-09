@@ -75,7 +75,7 @@ Container(
 ~~~
 
 >Hasil run
-![image](/W7/Fflutter_plugin_pubdev/image/Prak.png)
+![image](/W7/flutter_plugin_pubdev/image/Prak.png)
 
 
 ## Tugas Praktikum
