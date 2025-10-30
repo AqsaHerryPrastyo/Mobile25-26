@@ -50,7 +50,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     // loading spinner until the camera is ready, then show the camera preview
     // inside a Scaffold with an AppBar.
     return Scaffold(
-      appBar: AppBar(title: const Text('Take a picture - NIM Anda')),
+      appBar: AppBar(title: const Text('Take a picture - 2341720153')),
       // You must wait until the controller is initialized before displaying the
       // camera preview. Use a FutureBuilder to display a loading spinner until
       // the controller has finished initializing.

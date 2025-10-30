@@ -11,21 +11,52 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
+  List<CameraDescription> cameras = <CameraDescription>[];
+  try {
+    cameras = await availableCameras();
+  } catch (e) {
+    // If availableCameras fails (permissions, hardware, etc.), log the
+    // error and fall through to show an error UI below.
+    // ignore: avoid_print
+    print('Error fetching available cameras: $e');
+  }
 
-  // Get a specific camera from the list of available cameras.
-  firstCamera = cameras.first;
+  if (cameras.isNotEmpty) {
+    // Get a specific camera from the list of available cameras.
+    firstCamera = cameras.first;
 
-  runApp(
-    MaterialApp(
-      theme: ThemeData.dark(),
-      home: TakePictureScreen(
-        // Pass the appropriate camera to the TakePictureScreen widget.
-        camera: firstCamera,
+    runApp(
+      MaterialApp(
+        theme: ThemeData.dark(),
+        home: TakePictureScreen(
+          // Pass the appropriate camera to the TakePictureScreen widget.
+          camera: firstCamera,
+        ),
+        debugShowCheckedModeBanner: false,
       ),
-      debugShowCheckedModeBanner: false,
-    ),
-  );
+    );
+  } else {
+    // If no cameras are available, run a simple app that displays an error
+    // message instead of crashing.
+    runApp(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(title: const Text('Camera error')),
+          body: const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'No cameras available or failed to initialize the camera.\n'
+                'Check device permissions and try again.',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
