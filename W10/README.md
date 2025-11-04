@@ -660,3 +660,41 @@ PlanScreen(plan: plan,)));
         });
 }
 ~~~
+
+# Tugas Praktikum 3: State di Multiple Screens
+
+
+1. Selesaikan langkah-langkah praktikum tersebut, lalu dokumentasikan berupa GIF hasil akhir praktikum beserta penjelasannya di file README.md! Jika Anda menemukan ada yang error atau tidak berjalan dengan baik, silakan diperbaiki sesuai dengan tujuan aplikasi tersebut dibuat.
+2. Berdasarkan Praktikum 3 yang telah Anda lakukan, jelaskan maksud dari gambar diagram berikut ini!
+![img](/W10/master_plan/img/TugasPrak3.png)
+3. Lakukan capture hasil dari Langkah 14 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+![img](/W10/master_plan/img/Prak3.1.gif)
+
+## Jawaban Tugas Praktikum 3
+
+2) Penjelasan diagram
+Inti dari diagram:
+
+- MaterialApp: root aplikasi (di `lib/main.dart`) yang membungkus UI dan tema.
+- PlanProvider: sebuah `InheritedNotifier<ValueNotifier<List<Plan>>>` (file `lib/provider/plan_provider.dart`) yang menyimpan state pusat berupa daftar `Plan` (master list). Provider ini menyebarkan state ke seluruh subtree sehingga layar lain bisa membaca dan mengubah daftar rencana.
+- PlanCreatorScreen (kiri): layar master yang berisi kolom dengan `TextField` untuk menambah plan baru dan `Expanded` yang berisi `ListView` daftar plan. Saat user menambah plan, kode memodifikasi `planNotifier.value = List<Plan>.from(old)..add(newPlan)` sehingga terjadi salinan (immutable update) dan subscriber ter-notify.
+- Navigator Push (panah): saat pengguna mengetuk salah satu item pada daftar master, aplikasi memanggil `Navigator.of(context).push(...)` untuk membuka layar detail (`PlanScreen`) untuk plan yang dipilih.
+- PlanScreen (kanan): layar detail yang menampilkan daftar `Task` pada satu `Plan`. Di sini `PlanScreen` menerima sebuah `Plan` (atau identitasnya) saat dipush, lalu menggunakan `ValueListenableBuilder<List<Plan>>` untuk mengambil versi terbaru dari plan itu dari `PlanProvider` (mis. `plans.firstWhere((p)=>p.id==plan.id)` atau berdasarkan nama). UI menampilkan `ListView` berisi task dan footer `SafeArea` untuk menampilkan `completenessMessage`.
+
+Aliran data / perilaku singkat:
+1. Semua data master disimpan di `PlanProvider` sebagai `ValueNotifier<List<Plan>>`.
+2. `PlanCreatorScreen` membaca list untuk menampilkan daftar dan menambah plan baru (memodifikasi `planNotifier.value`).
+3. Saat navigasi ke `PlanScreen`, layar detail menerima referensi ke plan yang dipilih. Namun untuk memastikan nilai selalu up-to-date, `PlanScreen` membaca plan terbaru dari provider di dalam `ValueListenableBuilder` dan menampilkan `currentPlan` yang diambil dari daftar provider.
+4. Saat menambah/ubah task di `PlanScreen`, aplikasi membuat salinan list dan mengganti elemen plan pada indeks yang sesuai (`..[index] = Plan(...)`) sehingga perubahan tersimpan di provider dan semua listener ter-update.
+
+Kelebihan desain ini
+- Ringan dan mudah: `InheritedNotifier + ValueNotifier` cukup sederhana untuk kasus aplikasi kecil.
+- Immutability: membuat salinan list/plan saat update mengurangi bug aliasing dan memicu rebuild yang jelas.
+
+Keterbatasan dan rekomendasi perbaikan singkat
+- Identifikasi plan berdasarkan nama: saat ini plan dicari menggunakan `name`. Jika nama tidak unik atau dapat diubah, cari berdasarkan `id` unik (UUID atau integer) agar lebih aman. Alternatif cepat: ketika melakukan `push`, kirim `planIndex` sehingga update lebih langsung.
+- `TextFormField` dengan `initialValue`: `initialValue` hanya berlaku saat field pertama kali dibangun; setelah rebuild nilainya tidak otomatis sinkron. Rekomendasi: gunakan `TextEditingController` yang dikelola agar field selalu sinkron dengan model.
+- Copy seluruh list pada setiap update: untuk daftar besar atau update sering, menyalin seluruh list berulang-ulang bisa jadi kurang efisien — pertimbangkan state manager yang lebih kuat (Provider package dengan ChangeNotifier, Riverpod, Bloc) jika aplikasi tumbuh.
+- Race condition/konkurensi: jika ada beberapa sumber yang dapat memodifikasi data bersamaan, `ValueNotifier` sederhana mungkin perlu mekanisme sinkronisasi.
+
+Singkatnya: diagram menunjukkan pola master-detail yang menggunakan satu source-of-truth (`PlanProvider`) untuk menyimpan daftar rencana, layar master menambah/menampilkan rencana, dan layar detail menampilkan dan memperbarui task pada sebuah rencana; navigasi antar layar dilakukan dengan `Navigator.push`.
