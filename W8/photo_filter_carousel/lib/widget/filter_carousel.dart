@@ -49,9 +49,8 @@ class _PhotoFilterCarouselState extends State<PhotoFilterCarousel> {
       valueListenable: _filterColor,
       builder: (context, color, child) {
         // Anda bisa ganti dengan foto Anda sendiri
-        return Image.network(
-          'https://docs.flutter.dev/cookbook/img-files'
-          '/effects/instagram-buttons/millennial-dude.jpg',
+        return Image.asset(
+          '../img/testimg.jpg',
           color: color.withOpacity(0.5),
           colorBlendMode: BlendMode.color,
           fit: BoxFit.cover,
