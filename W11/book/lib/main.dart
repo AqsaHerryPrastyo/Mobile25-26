@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
 
 void main() {
   runApp(const MyApp());
@@ -62,6 +63,28 @@ class _FuturePageState extends State<FuturePage> {
     }
   }
 
+  // Praktikum 4 - Langkah 1: run multiple Futures in parallel using FutureGroup
+  void returnFG() {
+    final FutureGroup<int> futureGroup = FutureGroup<int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+    futureGroup.future.then((List<int> values) {
+      int total = 0;
+      for (var v in values) {
+        total += v;
+      }
+      setState(() {
+        result = total.toString();
+      });
+    }).catchError((e) {
+      setState(() {
+        result = 'An error occurred';
+      });
+    });
+  }
+
   // Praktikum 2 - Langkah 1: tiga method async yang mengembalikan angka setelah delay
   Future<int> returnOneAsync() async {
     await Future.delayed(const Duration(seconds: 3));
@@ -108,15 +131,11 @@ class _FuturePageState extends State<FuturePage> {
                 setState(() {
                   result = 'Getting number...';
                 });
-                getNumber().then((value) {
-                  setState(() {
-                    result = value.toString();
-                  });
-                }).catchError((e) {
-                  setState(() {
-                    result = 'An error occurred';
-                  });
+                // Praktikum 4 - Langkah 2: jalankan FutureGroup untuk parallel execution
+                setState(() {
+                  result = 'Running parallel...';
                 });
+                returnFG();
               },
             ),
             const Spacer(),

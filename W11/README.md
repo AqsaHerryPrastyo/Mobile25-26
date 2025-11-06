@@ -309,4 +309,49 @@ Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
 pada Langkah 2 completer dibuat dan kemudian diselesaikan selalu dengan completer.complete(42) sehingga Future selalu berhasil dan pemanggil (then) menerima nilai 42; sedangkan pada Langkah 5–6 calculate() dibungkus try/catch dan jika terjadi error dipanggil completer.completeError(...), lalu pemanggil menggunakan getNumber().then(...).catchError(...)
 ![img](/W11/img/Soal6.gif)
 
+## Praktikum 4: Memanggil Future secara paralel
+
+Ketika Anda membutuhkan untuk menjalankan banyak Future secara bersamaan, ada sebuah class yang dapat Anda gunakan yaitu: FutureGroup.
+
+FutureGroup tersedia di package async, yang mana itu harus diimpor ke file dart Anda, seperti berikut.
+import 'package:async/async.dart';
+
+
+### Langkah 1: Buka file main.dart
+
+Tambahkan method ini ke dalam class _FuturePageState
+~~~Dart
+void returnFG() {
+FutureGroup<int> futureGroup = FutureGroup<int>();
+futureGroup.add(returnOneAsync());
+futureGroup.add(returnTwoAsync());
+futureGroup.add(return ThreeAsync());
+futureGroup.close();
+futureGroup.future.then((List <int> value) {
+int total = 0;
+for (var element in value) {
+total += element;
+}
+setState(() {
+result = total.toString();
+});
+});
+}
+~~~
+
+### Langkah 2: Edit onPressed()
+Anda bisa hapus atau comment kode sebelumnya, kemudian panggil method dari langkah 1 tersebut.
+~~~Dart
+onPressed: () {
+returnFG();
+}
+~~~
+
+### Langkah 3: Run
+Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
+
+### Soal 7
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 7".
+
+![img](/W11/img/Soal7.gif)
 
