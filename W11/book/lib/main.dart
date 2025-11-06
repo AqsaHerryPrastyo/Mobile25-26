@@ -52,8 +52,14 @@ class _FuturePageState extends State<FuturePage> {
   }
 
   Future<void> calculate() async {
-    await Future.delayed(const Duration(seconds: 5));
-    completer.complete(42);
+    try {
+      await Future.delayed(const Duration(seconds: 5));
+      completer.complete(42);
+      // throw Exception(); // uncomment to simulate an error
+    } catch (e) {
+      // if an error occurs, complete the future with an error
+      completer.completeError({});
+    }
   }
 
   // Praktikum 2 - Langkah 1: tiga method async yang mengembalikan angka setelah delay
@@ -105,6 +111,10 @@ class _FuturePageState extends State<FuturePage> {
                 getNumber().then((value) {
                   setState(() {
                     result = value.toString();
+                  });
+                }).catchError((e) {
+                  setState(() {
+                    result = 'An error occurred';
                   });
                 });
               },

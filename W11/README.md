@@ -278,5 +278,35 @@ getNumber() mengembalikan completer.future lalu memanggil calculate() — jadi p
 calculate() menunggu 5 detik lalu memanggil completer.complete(42); — ini menyelesaikan Future dan mengirim nilai 42 ke pemanggil.
 Dengan getNumber().then((v) { setState(() => result = v.toString()); }); UI akan di-update ketika Future tersebut selesai.
 
+### Langkah 5: Ganti method calculate()
+Gantilah isi code method calculate() seperti kode berikut, atau Anda dapat membuat calculate2()
+~~~Dart
+calculate() async {
+try {
+await new Future.delayed (const Duration(seconds: 5));
+completer.complete(42);
+// throw Exception();
+}
+catch () {
+completer.completeError({});
+}
+}
+~~~
+
+### Langkah 6: Pindah ke onPressed()
+Ganti menjadi kode seperti berikut.
+~~~Dart
+getNumber().then((value) {
+  setState(() {
+    result = value.toString();
+  });
+}).catchError((e) {
+  result = 'An error occurred';
+});
+~~~
+### Soal 6
+Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
+pada Langkah 2 completer dibuat dan kemudian diselesaikan selalu dengan completer.complete(42) sehingga Future selalu berhasil dan pemanggil (then) menerima nilai 42; sedangkan pada Langkah 5–6 calculate() dibungkus try/catch dan jika terjadi error dipanggil completer.completeError(...), lalu pemanggil menggunakan getNumber().then(...).catchError(...)
+![img](/W11/img/Soal6.gif)
 
 
