@@ -151,5 +151,132 @@ result = body.length > 450 ? body.substring(0, 450) : body;
   ![img](/W11/img/Soal3.png)
 
  ## Praktikum 2: Menggunakan await/async untuk menghindari callbacks
+Pada codelab ini, kita akan menambah kode dari aplikasi books di praktikum sebelumnya.
+
+
+### Langkah 1: Buka file main.dart
+Tambahkan tiga method berisi kode seperti berikut di dalam class _FuturePageState.
+~~~Dart
+Future<int> returnOneAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 1;
+}
+
+Future<int> returnTwoAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 2;
+}
+
+Future<int> returnThreeAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 3;
+}
+~~~
+
+### Langkah 2: Tambah method count()
+Lalu tambahkan lagi method ini di bawah ketiga method sebelumnya.
+
+~~~Dart
+Future count() async {
+int total = 0;
+total = await returnOneAsync();
+total += await returnTwoAsync();
+total += await return ThreeAsync();
+setState(() {
+result = total.toString();
+});
+}
+~~~
+
+### Langkah 3: Panggil count()
+Lakukan comment kode sebelumnya, ubah isi kode onPressed() menjadi seperti berikut.
+
+~~~Dart
+ElevatedButton(
+child: Text('GO!'),
+onPressed: () {
+count();
+},
+}
+~~~
+
+### Langkah 4: Run
+Akhirnya, run atau tekan F5 jika aplikasi belum running. Maka Anda akan melihat seperti gambar berikut, hasil angka 6 akan tampil setelah delay 9 detik.
+
+![img](/W11/img/W11Prak2.gif)
+
+Soal 4
+Jelaskan maksud kode langkah 1 dan 2 tersebut!
+
+### Jawaban Soal 4
+
+- Maksud kode Langkah 1 (tiga method async):
+  - Ketiga fungsi `returnOneAsync()`, `returnTwoAsync()`, dan `returnThreeAsync()` adalah fungsi asynchronous yang menggunakan `async` dan mengembalikan `Future<int>`.
+  - Pada setiap fungsi digunakan `await Future.delayed(const Duration(seconds: 3));` — ini mensimulasikan operasi asynchronous (mis. network/disk) yang berlangsung 3 detik sebelum mengembalikan nilai (1, 2, atau 3).
+
+- Maksud kode Langkah 2 (`count()`):
+  - Fungsi `count()` memanggil ketiga fungsi di atas secara berurutan menggunakan `await`. Karena pemanggilan `await` dilakukan satu per satu, eksekusi bersifat serial sehingga total waktu kira-kira 3s + 3s + 3s = 9 detik.
+  - Setelah semua Future selesai, `count()` menjumlahkan hasilnya dan memanggil `setState()` untuk memperbarui UI (mis. menampilkan "6").
+
+- Inti pembelajaran:
+  - `async`/`await` membuat alur asynchronous lebih mudah dibaca daripada callback/then.
+  - `await` tidak mem-block UI thread; ia hanya menunda eksekusi fungsi sampai Future selesai, sementara event loop tetap berjalan.
+  - `setState()` diperlukan untuk memberi tahu Flutter agar merender ulang widget setelah state berubah.
+
+- Catatan performa & alternatif:
+  - Jika tujuan adalah menjalankan ketiga operasi sekaligus (paralel) dan menunggu semuanya selesai, gunakan `Future.wait([...])`. Contoh:
+    ```dart
+    final results = await Future.wait([returnOneAsync(), returnTwoAsync(), returnThreeAsync()]);
+    final total = results.reduce((a, b) => a + b);
+    ```
+    Dengan ini total waktu mendekati 3 detik, bukan 9 detik, karena ketiganya berjalan bersamaan.
+
+
+## Praktikum 3: Menggunakan Completer di Future
+
+## #Langkah 1: Buka main.dart
+Pastikan telah impor package async berikut.
+~~~Dart
+import 'package:async/async.dart';
+~~~
+
+### Langkah 2: Tambahkan variabel dan method
+Tambahkan variabel late dan method di class _FuturePageState seperti ini.
+~~~Dart
+late Completer completer;
+
+Future getNumber() {
+  completer = Completer<int>();
+  calculate();
+  return completer.future;
+}
+
+Future calculate() async {
+  await Future.delayed(const Duration(seconds : 5));
+  completer.complete(42);
+}
+~~~
+
+### Langkah 3: Ganti isi kode onPressed()
+Tambahkan kode berikut pada fungsi onPressed(). Kode sebelumnya bisa Anda comment.
+~~~Dart
+getNumber().then((value) {
+setState(() {
+result = value.toString();
+});
+});
+~~~
+### Langkah 4:
+Terakhir, run atau tekan F5 untuk melihat hasilnya jika memang belum running. Bisa juga lakukan hot restart jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Setelah 5 detik, maka angka 42 akan tampil.
+
+![img](/W11/img/W11Prak3.gif)
+
+### Soal 5
+Jelaskan maksud kode langkah 2 tersebut!
+completer = Completer<int>(); membuat controller untuk sebuah Future yang akan diselesaikan nanti.
+getNumber() mengembalikan completer.future lalu memanggil calculate() — jadi pemanggil mendapat Future yang belum selesai.
+calculate() menunggu 5 detik lalu memanggil completer.complete(42); — ini menyelesaikan Future dan mengirim nilai 42 ke pemanggil.
+Dengan getNumber().then((v) { setState(() => result = v.toString()); }); UI akan di-update ketika Future tersebut selesai.
+
 
 

@@ -42,6 +42,47 @@ class _FuturePageState extends State<FuturePage> {
     return http.get(url);
   }
 
+  // Praktikum 3 - Completer example
+  late Completer<int> completer;
+
+  Future<int> getNumber() {
+    completer = Completer<int>();
+    calculate();
+    return completer.future;
+  }
+
+  Future<void> calculate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    completer.complete(42);
+  }
+
+  // Praktikum 2 - Langkah 1: tiga method async yang mengembalikan angka setelah delay
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
+  }
+
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
+  // Praktikum 2 - Langkah 2: count() yang memanggil ketiga method di atas secara berurutan
+  Future<void> count() async {
+    int total = 0;
+    total = await returnOneAsync();
+    total += await returnTwoAsync();
+    total += await returnThreeAsync();
+    setState(() {
+      result = total.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,19 +98,14 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                // show immediate feedback
+                // Praktikum 3 - Langkah 3: gunakan Completer
                 setState(() {
-                  result = 'Loading...';
+                  result = 'Getting number...';
                 });
-                // use then/catchError as required by the exercise
-                getData().then((value) {
-                  // take only the first 450 characters to avoid huge output
-                  result = value.body.toString().substring(0, 450);
-                  setState(() {});
-                }).catchError((_) {
-                  // handle any error from the Future
-                  result = 'An error occurred';
-                  setState(() {});
+                getNumber().then((value) {
+                  setState(() {
+                    result = value.toString();
+                  });
                 });
               },
             ),
