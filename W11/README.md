@@ -355,3 +355,17 @@ Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan co
 
 ![img](/W11/img/Soal7.gif)
 
+### Langkah 4: Ganti variabel futureGroup
+Anda dapat menggunakan FutureGroup dengan Future.wait seperti kode berikut.
+~~~Dart
+final futures = Future.wait<int>([
+  returnOneAsync(),
+  returnTwoAsync(),
+  returnThreeAsync(),
+]);
+~~~ 
+
+### Soal 8
+Jelaskan maksud perbedaan kode langkah 1 dan 4!
+
+keduanya menjalankan beberapa Future secara paralel dan mengembalikan hasil ketika semua selesai, tetapi cara dan tujuan penggunaannya berbeda — FutureGroup (dari package:async) dirancang untuk kasus di mana Anda ingin menambah Future secara dinamis dari berbagai tempat lalu menutup group ketika sudah tidak ada lagi (berguna untuk pengumpulan hasil bertahap), sedangkan Future.wait (core Dart) menerima daftar Future yang sudah diketahui sebelumnya dan lebih sederhana/langsung dipakai tanpa dependensi eksternal. Secara performa keduanya sama (semua Future berjalan paralel), namun Future.wait lebih ringan dan biasanya dipakai kecuali Anda perlu kemampuan “add/close” atau pengelolaan yang lebih fleksibel dari FutureGroup.

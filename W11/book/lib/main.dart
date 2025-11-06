@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,18 +62,16 @@ class _FuturePageState extends State<FuturePage> {
     }
   }
 
-  // Praktikum 4 - Langkah 1: run multiple Futures in parallel using FutureGroup
+  // Praktikum 4 - Langkah 1 (alternative): run multiple Futures in parallel using Future.wait
   void returnFG() {
-    final FutureGroup<int> futureGroup = FutureGroup<int>();
-    futureGroup.add(returnOneAsync());
-    futureGroup.add(returnTwoAsync());
-    futureGroup.add(returnThreeAsync());
-    futureGroup.close();
-    futureGroup.future.then((List<int> values) {
-      int total = 0;
-      for (var v in values) {
-        total += v;
-      }
+    final futures = Future.wait<int>([
+      returnOneAsync(),
+      returnTwoAsync(),
+      returnThreeAsync(),
+    ]);
+
+    futures.then((List<int> values) {
+      final total = values.fold<int>(0, (prev, elem) => prev + elem);
       setState(() {
         result = total.toString();
       });
