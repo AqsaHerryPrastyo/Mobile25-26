@@ -115,6 +115,24 @@ class _FuturePageState extends State<FuturePage> {
     });
   }
 
+  // Praktikum 5 - Langkah 4: handleError() using try/await/catch/finally
+  Future<void> handleError() async {
+    try {
+      await returnError();
+      setState(() {
+        result = 'Success';
+      });
+    } catch (error) {
+      final msg = error.toString();
+      final clean = msg.startsWith('Exception: ') ? msg.substring(11) : msg;
+      setState(() {
+        result = clean;
+      });
+    } finally {
+      print('Complete');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,26 +148,11 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                // Praktikum 5 - Langkah 2: call returnError() and handle result/error
+                // Praktikum 5 - Langkah 4: use async/await style
                 setState(() {
-                  result = 'Calling returnError()...';
+                  result = 'Calling handleError()...';
                 });
-
-                returnError()
-                    .then((value) {
-                  setState(() {
-                    result = 'Success';
-                  });
-                })
-                    .catchError((onError) {
-                      // show a cleaner message (remove 'Exception: ' prefix if present)
-                      final msg = onError?.toString() ?? 'An error occurred';
-                      final clean = msg.startsWith('Exception: ') ? msg.substring(11) : msg;
-                      setState(() {
-                        result = clean;
-                      });
-                    })
-                    .whenComplete(() => print('Complete'));
+                handleError();
               },
             ),
             const Spacer(),

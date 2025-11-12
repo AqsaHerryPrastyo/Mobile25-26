@@ -407,3 +407,42 @@ Lakukan run dan klik tombol GO! maka akan menghasilkan seperti gambar berikut.
 ### Soal 9
 Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 9".
 ![img](/W11/img/Soal9.png)
+
+### Langkah 4: Tambah method handleError()
+Tambahkan kode ini di dalam class _FutureStatePage
+
+~~~Dart
+Future handleError() async {
+try {
+await returnError();
+}
+catch (error) {
+setState(() {
+result = error.toString();
+});
+}
+finally {
+print('Complete');
+}
+}
+~~~
+
+### Soal 10
+Panggil method handleError() tersebut di ElevatedButton, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
+
+### Jawaban Soal 10
+
+- Hasil setelah memanggil `handleError()` dari tombol ElevatedButton:
+  - Setelah menekan tombol GO, `handleError()` akan memanggil `returnError()` dengan `await`. Karena `returnError()` melempar Exception, kode langsung masuk ke blok `catch`.
+  - Di blok `catch`, variabel `result` di-set menjadi pesan error yang sudah dibersihkan (mis. "Something terrible happened!") sehingga UI menampilkan pesan ini.
+  - Blok `finally` selalu dieksekusi sehingga konsol akan menampilkan "Complete".
+
+- Perbedaan antara Langkah 1 (menggunakan `.then/.catchError/.whenComplete`) dan Langkah 4 (menggunakan `async/await` dengan `try/catch/finally`):
+  - Sintaks dan gaya:
+    - `.then/.catchError` menggunakan chaining callback; `async/await` menggunakan struktur try/catch yang mirip kode sinkron.
+  - Pembacaan & pemeliharaan:
+    - `async/await` biasanya lebih mudah dibaca dan di-debug pada alur yang kompleks.
+  - Kontrol alur:
+    - Dengan `.then`, handler error dipasang secara eksplisit di chain; dengan `try/catch`, error ditangkap langsung pada tempat pemanggilan `await`.
+  - Hasil runtime:
+    - Kedua pendekatan setara fungsional: keduanya menangani hasil dan error Future. Perbedaan utama hanya pada gaya penulisan dan kenyamanan pembacaan.
