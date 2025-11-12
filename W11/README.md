@@ -630,9 +630,33 @@ Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan co
   - Secara visual untuk pengguna tidak banyak berubah: kedua pendekatan menampilkan indikator loading (CircularProgressIndicator) saat menunggu dan menampilkan koordinat (Text) saat Future selesai.
   - Perbedaan utama ada pada cara kerja dan pengelolaan state di dalam kode: pada implementasi lama Anda menangani callback dan memanggil `setState()` secara manual, sedangkan `FutureBuilder` membuat widget menjadi reaktif dan otomatis merespon perubahan status Future tanpa perlu memanggil `setState()` secara eksplisit.
 
+### Langkah 5: Tambah handling error
+Tambahkan kode berikut untuk menangani ketika terjadi error. Kemudian hot restart.
+~~~Dart
+else if (snapshot.connectionState == ConnectionState.done) {
+  if (snapshot.hasError) {
+     return Text('Something terrible happened!');
+  }
+  return Text(snapshot.data.toString());
+}
+~~~
 
+### Soal 14
+Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 14".
+### Jawaban Soal 14
 
+- Apakah ada perbedaan UI dengan langkah sebelumnya?
+  - Ya — sekarang ketika terjadi error pada proses pengambilan posisi, UI menampilkan pesan error yang informatif (mis. "Something terrible happened!" atau teks error dari `snapshot.error`) alih-alih menampilkan teks kosong atau tidak merespon.
 
+- Mengapa demikian?
+  - Dengan menambahkan pengecekan `snapshot.hasError` di `FutureBuilder`, Anda mengekspresikan penanganan error secara eksplisit di layer UI. Ini memungkinkan aplikasi menampilkan state error secara deterministik dan ramah pengguna.
+  - Sebelumnya, tanpa `hasError`, jika terjadi exception hasilnya bisa tidak ter-handle dengan baik (widget mungkin menampilkan kosong atau aplikasi dapat crash tergantung bagaimana error ditangani). Dengan `hasError` Anda dapat:
+    - Menampilkan pesan yang jelas kepada pengguna.
+    - Menyediakan fallback UI (mis. tombol coba lagi) atau instruksi selanjutnya.
+    - Menghindari menampilkan data kosong atau raw exception yang sulit dibaca.
+
+![img](/W11/img/Soal11.png)
 
 
 
