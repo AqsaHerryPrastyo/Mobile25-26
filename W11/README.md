@@ -369,3 +369,41 @@ final futures = Future.wait<int>([
 Jelaskan maksud perbedaan kode langkah 1 dan 4!
 
 keduanya menjalankan beberapa Future secara paralel dan mengembalikan hasil ketika semua selesai, tetapi cara dan tujuan penggunaannya berbeda — FutureGroup (dari package:async) dirancang untuk kasus di mana Anda ingin menambah Future secara dinamis dari berbagai tempat lalu menutup group ketika sudah tidak ada lagi (berguna untuk pengumpulan hasil bertahap), sedangkan Future.wait (core Dart) menerima daftar Future yang sudah diketahui sebelumnya dan lebih sederhana/langsung dipakai tanpa dependensi eksternal. Secara performa keduanya sama (semua Future berjalan paralel), namun Future.wait lebih ringan dan biasanya dipakai kecuali Anda perlu kemampuan “add/close” atau pengelolaan yang lebih fleksibel dari FutureGroup.
+
+## Praktikum 5: Menangani Respon Error pada Async Code
+
+Ada beberapa teknik untuk melakukan handle error pada code async. Pada praktikum ini Anda akan menggunakan 2 cara, yaitu then() callback dan pola async/await.
+
+Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+### Langkah 1: Buka file main.dart
+Tambahkan method ini ke dalam class _FuturePageState
+
+~~~Dart
+Future returnError() async {
+await Future.delayed(const Duration(seconds: 2));
+throw Exception('Something terrible happened!');
+}
+~~~
+
+### Langkah 2: ElevatedButton
+Ganti dengan kode berikut
+~~~Dart
+returnError()
+.then((value) {
+setState(() {
+result = 'Success';
+});
+}).catchError ((onError) {
+setState(() {
+result = onError.toString();
+});
+}).whenComplete(() => print('Complete'));
+~~~
+
+### Langkah 3: Run
+Lakukan run dan klik tombol GO! maka akan menghasilkan seperti gambar berikut.
+
+### Soal 9
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 9".
+![img](/W11/img/Soal9.png)

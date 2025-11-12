@@ -82,6 +82,12 @@ class _FuturePageState extends State<FuturePage> {
     });
   }
 
+  // Praktikum 5 - Langkah 1: method that throws an error after a delay
+  Future<void> returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Something terrible happened!');
+  }
+
   // Praktikum 2 - Langkah 1: tiga method async yang mengembalikan angka setelah delay
   Future<int> returnOneAsync() async {
     await Future.delayed(const Duration(seconds: 3));
@@ -124,15 +130,26 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                // Praktikum 3 - Langkah 3: gunakan Completer
+                // Praktikum 5 - Langkah 2: call returnError() and handle result/error
                 setState(() {
-                  result = 'Getting number...';
+                  result = 'Calling returnError()...';
                 });
-                // Praktikum 4 - Langkah 2: jalankan FutureGroup untuk parallel execution
-                setState(() {
-                  result = 'Running parallel...';
-                });
-                returnFG();
+
+                returnError()
+                    .then((value) {
+                  setState(() {
+                    result = 'Success';
+                  });
+                })
+                    .catchError((onError) {
+                      // show a cleaner message (remove 'Exception: ' prefix if present)
+                      final msg = onError?.toString() ?? 'An error occurred';
+                      final clean = msg.startsWith('Exception: ') ? msg.substring(11) : msg;
+                      setState(() {
+                        result = clean;
+                      });
+                    })
+                    .whenComplete(() => print('Complete'));
               },
             ),
             const Spacer(),
