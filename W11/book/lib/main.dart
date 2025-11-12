@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'geolocation.dart';
 import 'navigation_first.dart';
+import 'navigation_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -174,6 +175,16 @@ class _FuturePageState extends State<FuturePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const NavigationFirst()),
+                );
+              },
+            ),
+            const SizedBox(height: 12.0),
+            ElevatedButton(
+              child: const Text('Dialog Navigation'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NavigationDialogScreen()),
                 );
               },
             ),
