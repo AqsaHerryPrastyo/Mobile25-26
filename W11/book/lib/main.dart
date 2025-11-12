@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'geolocation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -153,6 +154,16 @@ class _FuturePageState extends State<FuturePage> {
                   result = 'Calling handleError()...';
                 });
                 handleError();
+              },
+            ),
+            const SizedBox(height: 12.0),
+            ElevatedButton(
+              child: const Text('Location'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LocationScreen()),
+                );
               },
             ),
             const Spacer(),

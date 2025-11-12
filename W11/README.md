@@ -446,3 +446,93 @@ Panggil method handleError() tersebut di ElevatedButton, lalu run. Apa hasilnya?
     - Dengan `.then`, handler error dipasang secara eksplisit di chain; dengan `try/catch`, error ditangkap langsung pada tempat pemanggilan `await`.
   - Hasil runtime:
     - Kedua pendekatan setara fungsional: keduanya menangani hasil dan error Future. Perbedaan utama hanya pada gaya penulisan dan kenyamanan pembacaan.
+
+## Praktikum 6: Menggunakan Future dengan StatefulWidget
+
+Seperti yang Anda telah pelajari, Stateless widget tidak dapat menyimpan informasi (state), StatefulWidget dapat mengelola variabel dan properti dengan method setState(), yang kemudian dapat ditampilkan pada UI. State adalah informasi yang dapat berubah selama life cycle widget itu berlangsung.
+
+Ada 4 method utama dalam life cycle StatefullWidget:
+
+initState(): dipanggil sekali ketika state dibangun. Bisa dikatakan ini juga sebagai konstruktor class.
+build(): dipanggil setiap kali ada perubahan state atau UI. Method ini melakukan destroy UI dan membangun ulang dari nol.
+deactive() dan dispose(): digunakan untuk menghapus widget dari tree, pada beberapa kasus dimanfaatkan untuk menutup koneksi ke database atau menyimpan data sebelum berpindah screen.
+Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+### Langkah 1: install plugin geolocator
+Tambahkan plugin geolocator dengan mengetik perintah berikut di terminal.
+~~~Dart
+flutter pub add geolocator
+~~~
+### Langkah 2: Tambah permission GPS
+Jika Anda menargetkan untuk platform Android, maka tambahkan baris kode berikut di file android/app/src/main/androidmanifest.xml
+~~~Dart
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+~~~
+
+### Langkah 3: Buat file geolocation.dart
+Tambahkan file baru ini di folder lib project Anda.
+
+### Langkah 4: Buat StatefulWidget
+Buat class LocationScreen di dalam file geolocation.dart
+
+### Langkah 5: Isi kode geolocation.dart
+~~~Dart
+import 'package:flutter/material.dart';
+import 'package: geolocator/geolocator.dart';
+class LocationScreen extends StatefulWidget {
+const LocationScreen({super.key});
+}
+@override
+State<LocationScreen> createState() => _LocationScreenState();
+class_LocationScreenState extends State <LocationScreen> {
+String myPosition = '';
+@override
+void initState() {
+super.initState();
+getPosition().then((Position myPos) {
+myPosition =
+'Latitude: ${myPos.latitude.toString()) Longitude:
+{myPos.longitude.toString()}';
+}
+setState(() {
+myPosition = myPosition;
+});
+});
+@override
+Widget build (BuildContext context) {
+}
+return Scaffold(
+appBar: AppBar(title: const Text('Current Location')),
+body: Center (child: Text (myPosition)),
+);
+Future<Position> getPosition() async {
+await Geolocator.requestPermission();
+await Geolocator.isLocationServiceEnabled();
+Position? position =
+await Geolocator. getCurrentPosition();
+return position;
+}}
+~~~
+
+### Soal 11
+Tambahkan nama panggilan Anda pada tiap properti title sebagai identitas pekerjaan Anda.
+
+### Jawaban Soal 11
+
+- Pada tugas ini saya menambahkan nama panggilan "Aqsa" pada properti `title` di beberapa tempat (contoh: `Future Demo - Aqsa`, `Back from the Future - Aqsa`, dan `Current Location - Aqsa`) untuk menandai hasil pekerjaan.
+
+- Setelah menambah dependensi `geolocator` di `pubspec.yaml`, jalankan perintah berikut sebelum build/run agar paket ter-install:
+
+```bash
+flutter pub get
+```
+### Langkah 6: Edit main.dart
+Panggil screen baru tersebut di file main Anda seperti berikut.
+~~~Dart
+home: LocationScreen(),
+~~~
+
+Langkah 7: Run
+Run project Anda di device atau emulator (bukan browser), maka akan tampil seperti berikut ini.
+![img](/W11/img/Soal11.png)
