@@ -658,6 +658,115 @@ Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan co
 
 ![img](/W11/img/Soal11.png)
 
+## Praktikum 8: Navigation route dengan Future Function
 
+### Langkah 1: Buat file baru navigation_first.dart
+Buatlah file baru ini di project lib Anda.
 
+### Langkah 2: Isi kode navigation_first.dart
+~~~Dart
+import 'package:flutter/material.dart';
+class NavigationFirst extends StatefulWidget {
+const NavigationFirst({super.key});
+@override
+State NavigationFirst> createState() => _NavigationFirstState();
+}
+class _NavigationFirstState extends State<NavigationFirst> {
+Color color = Colors.blue.shade700;
+@override
+Widget build (BuildContext context) {
+return Scaffold(
+backgroundColor:
+color,
+appBar:
+AppBar(
+title: const Text('Navigation First Screen'),
+),
+body:
+Center(
+child:
+ElevatedButton(
+child: const Text('Change Color'),
+onPressed:
+() {
+_navigateAndGetColor(context);
+}),
+),
+);
+}}
+~~~
+### Soal 15
+Tambahkan nama panggilan Anda pada tiap properti title sebagai identitas pekerjaan Anda.
+Silakan ganti dengan warna tema favorit Anda.
 
+![img](/W11/img/Soal15.png)
+
+Langkah 3: Tambah method di class _NavigationFirstState
+Tambahkan method ini.
+~~~Dart
+Future _navigateAndGetColor(BuildContext context) async {
+   color = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const NavigationSecond()),) ?? Colors.blue;
+   setState(() {});
+   });
+}
+~~~
+
+Langkah 4: Buat file baru navigation_second.dart
+Buat file baru ini di project lib Anda. Silakan jika ingin mengelompokkan view menjadi satu folder dan sesuaikan impor yang dibutuhkan.
+
+Langkah 5: Buat class NavigationSecond dengan StatefulWidget
+
+~~~Dart
+import package:flutter/material.dart';
+class NavigationSecond extends StatefulWidget {
+const NavigationSecond({super.key});
+}
+@override
+State NavigationSecond> createState() => _Navigation SecondState();
+class_NavigationSecondState extends State NavigationSecond> {
+@override
+Widget build (BuildContext context) {
+Color color;
+return Scaffold(
+appBar: AppBar(
+title: const Text("Navigation Second Screen'),
+),
+body: Center(
+child:
+Column(
+mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+children: [
+ElevatedButton(
+child:
+const Text('Red'),
+onPressed:
+() {
+color = Colors.red.shade700;
+Navigator.pop(context, color);
+}),
+ElevatedButton(
+child: const Text('Green'),
+onPressed: () {
+color = Colors.green.shade700;
+Navigator.pop(context, color);
+}),
+ElevatedButton(
+child: const Text('Blue'),
+onPressed:
+() {
+color = Colors.blue.shade700;
+Navigator.pop(context, color);
+}),
+1,
+),
+));
+}}
+~~~
+
+### Langkah 6: Edit main.dart
+Lakukan edit properti home.
+
+home: const NavigationFirst(),
+
+![img](/W11/img/Soal16.png)
