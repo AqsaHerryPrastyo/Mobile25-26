@@ -9,51 +9,19 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  String myPosition = 'Unknown';
-  bool _loading = false;
+  Future<Position>? position;
 
   @override
   void initState() {
     super.initState();
-    _initPosition();
+    position = getPosition();
   }
 
-  Future<void> _initPosition() async {
-    setState(() => _loading = true);
-    try {
-      final position = await getPosition();
-      setState(() {
-        myPosition = 'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
-      });
-    } catch (e) {
-      setState(() {
-        myPosition = 'Error: ${e.toString()}';
-      });
-    } finally {
-      setState(() => _loading = false);
-    }
-  }
-
+  // Praktikum 7 - Langkah 1: simplified getPosition for FutureBuilder example
   Future<Position> getPosition() async {
-    // artificial delay so the loading indicator is visible for the exercise
+    // ensure location service is enabled, then simulate delay for loading
+    await Geolocator.isLocationServiceEnabled();
     await Future.delayed(const Duration(seconds: 3));
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw Exception('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      throw Exception('Location permissions are permanently denied');
-    }
-
-    final isEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!isEnabled) {
-      throw Exception('Location services are disabled');
-    }
-
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
@@ -64,12 +32,27 @@ class _LocationScreenState extends State<LocationScreen> {
         title: const Text('Current Location - Aqsa'),
       ),
       body: Center(
-        child: _loading
-            ? const CircularProgressIndicator()
-            : Padding(
+        child: FutureBuilder<Position>(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(myPosition, textAlign: TextAlign.center),
-              ),
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else if (snapshot.hasData) {
+              final p = snapshot.data!;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Latitude: ${p.latitude}, Longitude: ${p.longitude}', textAlign: TextAlign.center),
+              );
+            } else {
+              return const Text('No data');
+            }
+          },
+        ),
       ),
     );
   }

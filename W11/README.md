@@ -564,7 +564,76 @@ Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan co
   - Umumnya TIDAK. Paket `geolocator` berfungsi pada platform native (Android, iOS, macOS, Windows) dan tidak menggunakan API browser langsung. Untuk Flutter Web, Anda perlu paket yang mendukung web (mis. `geolocator_web`) or menggunakan JavaScript interop to call the browser Geolocation API. Selain itu, running in a desktop browser on a laptop/PC may not provide precise GPS coordinates (the browser may use IP-based location or ask user permission and return coarse location).
   - Singkatnya: `geolocator` may not return GPS coordinates on `flutter run -d chrome` or similar; use a real device (Android/iOS) or a web implementation that uses the browser Geolocation API.
 
-- Capture & commit:
-  - Jalankan app on a real device or emulator, press Location, wait for the loading spinner, then capture a GIF/screenshot showing the coordinates (or the error message if permissions are denied).
-  - Place the GIF/screenshot in `W11/img/` (for example `W11/img/Soal12.gif`) and commit with message:
+  [img](/W11/img/Soal12.png)
+
+## Praktikum 7: Manajemen Future dengan FutureBuilder
+
+### Langkah 1: Modifikasi method getPosition()
+Buka file geolocation.dart kemudian ganti isi method dengan kode ini.
+~~~Dart
+Future<Position> getPosition() async {
+await Geolocator.isLocationServiceEnabled();
+await Future.delayed(const Duration(seconds: 3));
+Position position = await Geolocator. getCurrentPosition ();
+return position; }
+~~~
+
+### Langkah 2: Tambah variabel
+Tambah variabel ini di class _LocationScreenState
+~~~Dart
+Future<Position>? position;
+~~~
+
+### Langkah 3: Tambah initState()
+Tambah method ini dan set variabel position
+~~~Dart
+@override
+void initState() {
+super.initState();
+position = getPosition();
+}
+~~~
+
+### Langkah 4: Edit method build()
+Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
+~~~Dart
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+appBar: AppBar (title: Text('Current Location')),
+body: Center (child: FutureBuilder(
+future: position,
+builder: (BuildContext context, AsyncSnapshot<Position>
+snapshot) {
+if (snapshot.connectionState ==
+ConnectionState.waiting) {
+return const CircularProgress Indicator();
+}
+else if (snapshot.connectionState ==
+ConnectionState.done) {
+return Text(snapshot.data.toString());
+}
+else {
+return const Text('');
+}
+},
+),
+));
+}
+~~~
+### Soal 13
+Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 13".
+### Jawaban Soal 13
+
+- Apakah ada perbedaan UI dengan praktikum sebelumnya?
+  - Secara visual untuk pengguna tidak banyak berubah: kedua pendekatan menampilkan indikator loading (CircularProgressIndicator) saat menunggu dan menampilkan koordinat (Text) saat Future selesai.
+  - Perbedaan utama ada pada cara kerja dan pengelolaan state di dalam kode: pada implementasi lama Anda menangani callback dan memanggil `setState()` secara manual, sedangkan `FutureBuilder` membuat widget menjadi reaktif dan otomatis merespon perubahan status Future tanpa perlu memanggil `setState()` secara eksplisit.
+
+
+
+
+
+
+
 
