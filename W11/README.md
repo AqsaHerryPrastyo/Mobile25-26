@@ -533,6 +533,38 @@ Panggil screen baru tersebut di file main Anda seperti berikut.
 home: LocationScreen(),
 ~~~
 
-Langkah 7: Run
+### Langkah 7: Run
 Run project Anda di device atau emulator (bukan browser), maka akan tampil seperti berikut ini.
 ![img](/W11/img/Soal11.png)
+
+### Langkah 8: Tambahkan animasi loading
+Tambahkan widget loading seperti kode berikut. Lalu hot restart, perhatikan perubahannya.
+~~~Dart
+@override
+Widget build (BuildContext context) {
+final myWidget = myPosition ==
+? const Circular ProgressIndicator()
+: const Text(myPosition);;
+return Scaffold(
+appBar: AppBar(title: Text('Current Location')),
+body: Center(child:myWidget),
+);
+}
+~~~
+
+### Soal 12
+Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method getPosition() dengan kode await Future.delayed(const Duration(seconds: 3));
+Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 12".
+
+### Jawaban Soal 12
+
+- Setelah menambahkan `await Future.delayed(const Duration(seconds: 3));` pada `getPosition()`, loading indicator akan terlihat karena kita memaksa penundaan selama 3 detik sebelum pengambilan posisi dimulai.
+- Mengenai apakah Anda mendapatkan koordinat GPS saat menjalankan di browser:
+  - Umumnya TIDAK. Paket `geolocator` berfungsi pada platform native (Android, iOS, macOS, Windows) dan tidak menggunakan API browser langsung. Untuk Flutter Web, Anda perlu paket yang mendukung web (mis. `geolocator_web`) or menggunakan JavaScript interop to call the browser Geolocation API. Selain itu, running in a desktop browser on a laptop/PC may not provide precise GPS coordinates (the browser may use IP-based location or ask user permission and return coarse location).
+  - Singkatnya: `geolocator` may not return GPS coordinates on `flutter run -d chrome` or similar; use a real device (Android/iOS) or a web implementation that uses the browser Geolocation API.
+
+- Capture & commit:
+  - Jalankan app on a real device or emulator, press Location, wait for the loading spinner, then capture a GIF/screenshot showing the coordinates (or the error message if permissions are denied).
+  - Place the GIF/screenshot in `W11/img/` (for example `W11/img/Soal12.gif`) and commit with message:
+

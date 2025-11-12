@@ -35,6 +35,8 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   Future<Position> getPosition() async {
+    // artificial delay so the loading indicator is visible for the exercise
+    await Future.delayed(const Duration(seconds: 3));
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
