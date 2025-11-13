@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'stream.dart';
 
 void main() {
@@ -49,6 +50,9 @@ class StreamHomePageState extends State<StreamHomePage> {
   Color bgColor = Colors.blueGrey;
   late ColorStream colorStream;
   late StreamSubscription<Color> _sub;
+  int lastNumber = 0;
+  late StreamController<int> numberStreamController;
+  late NumberStream numberStream;
 
   void changeColor() {
     _sub = colorStream.getColors().listen((eventColor) {
@@ -63,12 +67,29 @@ class StreamHomePageState extends State<StreamHomePage> {
     super.initState();
     colorStream = ColorStream();
     changeColor();
+    // setup number stream
+    numberStream = NumberStream();
+    numberStreamController = numberStream.controller;
+    Stream stream = numberStreamController.stream;
+    stream.listen((event) {
+      setState(() {
+        lastNumber = event as int;
+      });
+    });
   }
 
   @override
   void dispose() {
     _sub.cancel();
+    // close number stream controller
+    numberStream.close();
     super.dispose();
+  }
+
+  void addRandomNumber() {
+    Random random = Random();
+    int myNum = random.nextInt(10);
+    numberStream.addNumberToSink(myNum);
   }
 
   @override
@@ -77,8 +98,22 @@ class StreamHomePageState extends State<StreamHomePage> {
       appBar: AppBar(
         title: const Text('Stream - Herry'),
       ),
-      body: Container(
-        decoration: BoxDecoration(color: bgColor),
+      body: SizedBox(
+        width: double.infinity,
+        child: Container(
+          decoration: BoxDecoration(color: bgColor),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(lastNumber.toString(), style: const TextStyle(fontSize: 48, color: Colors.white)),
+              ElevatedButton(
+                onPressed: () => addRandomNumber(),
+                child: const Text('New Random Number'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
