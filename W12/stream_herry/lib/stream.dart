@@ -14,4 +14,14 @@ class ColorStream {
     Colors.lime,
     Colors.indigo,
   ];
+
+  // Langkah 5 & 6: method yang mengembalikan Stream<Color>
+  Stream<Color> getColors() async* {
+    yield* Stream.periodic(
+      const Duration(seconds: 1), (int t) {
+        int index = t % colors.length;
+        return colors[index];
+      },
+    );
+  }
 }
