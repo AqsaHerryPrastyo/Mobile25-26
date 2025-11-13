@@ -204,3 +204,109 @@ Lakukan commit hasil jawaban Soal 5 dengan pesan "W12: Jawaban Soal 5"
 - **Kapan memakai yang mana:**
   - Gunakan `listen` bila Anda butuh kontrol lifecycle (pause/resume/cancel) atau ketika Anda ingin memproses event tanpa men-block eksekusi fungsi.
   - Gunakan `await for` bila Anda ingin menulis logika yang sederhana, sequential, dan ingin menunggu sampai Stream selesai atau berhenti berdasarkan kondisi internal.
+
+
+## Praktikum 2: Stream controllers dan sinks
+
+### Langkah 1: Buka file stream.dart
+Lakukan impor dengan mengetik kode ini.
+~~~Dart
+import 'dart:async';
+~~~
+
+### Langkah 2: Tambah class NumberStream
+Tetap di file stream.dart tambah class baru seperti berikut.
+~~~Dart
+class NumberStream {
+}
+~~~
+### Langkah 3: Tambah StreamController
+Di dalam class NumberStream buatlah variabel seperti berikut.
+~~~Dart
+final StreamController<int> controller = StreamController<int>();
+~~~
+
+### Langkah 4: Tambah method addNumberToSink
+Tetap di class NumberStream buatlah method ini
+~~~Dart
+void addumberToSink(int newNumber){
+controller.sink.add(newNumber);}
+~~~ 
+
+### Langkah 5: Tambah method close()
+~~~Dart
+close () {
+controller.close();}
+~~~
+### Langkah 6: Buka main.dart
+Ketik kode import seperti berikut
+~~~Dart
+import 'dart: async';
+import 'dart: math';
+~~~
+
+### Langkah 7: Tambah variabel
+Di dalam class _StreamHomePageState ketik variabel berikut
+~~~Dart
+int lastNumber = 0;
+late StreamController numberStreamController;
+late NumberStream numberStream;
+~~~ 
+### Langkah 8: Edit initState()
+~~~Dart
+@override
+void initState() {
+numberStream = NumberStream();
+numberStreamController = numberStream.controller;
+Stream stream = numberStreamController.stream;
+stream.listen((event) {
+setState(() {
+lastNumber = event;
+});
+});
+super.initState();
+}
+~~~
+### Langkah 9: Edit dispose()
+~~~Dart
+coverride
+void dispose () {
+numberStreamController.close();
+super. dispose();}
+~~~
+### Langkah 10: Tambah method addRandomNumber()
+~~~Dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  numberStream.addNumberToSink(myNum);
+}
+~~~
+### Langkah 11: Ubah isi Scaffold()
+Sesuaikan kode seperti berikut.
+~~~Dart
+body: SizedBox (
+width: double.infinity,
+child: Column (
+mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+crossAxisAlignment: CrossAxisAlignment.center,
+children:
+[
+Text(lastNumber.toString()),
+ElevatedButton(
+onPressed: () => addRandomNumber(),
+child: Text('New Random Number'),
+)
+],
+),
+)
+~~~
+### Langkah 12: Run
+Lakukan running pada aplikasi Flutter Anda, maka akan terlihat seperti gambar berikut.
+
+### Soal 6
+Jelaskan maksud kode langkah 8 dan 10 tersebut!
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W12: Jawaban Soal 6".
+
+![img](/W11/img/Soal6.gif)
