@@ -37,4 +37,9 @@ class NumberStream {
   void close() {
     controller.close();
   }
+
+  // Langkah 13: method untuk menambahkan error ke stream (digunakan untuk pengujian)
+  void addError() {
+    controller.sink.addError('error');
+  }
 }

@@ -70,10 +70,14 @@ class StreamHomePageState extends State<StreamHomePage> {
     // setup number stream
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
-    Stream stream = numberStreamController.stream;
+    Stream<int> stream = numberStreamController.stream;
     stream.listen((event) {
       setState(() {
-        lastNumber = event as int;
+        lastNumber = event;
+      });
+    }).onError((error) {
+      setState(() {
+        lastNumber = -1;
       });
     });
   }
@@ -90,6 +94,8 @@ class StreamHomePageState extends State<StreamHomePage> {
     Random random = Random();
     int myNum = random.nextInt(10);
     numberStream.addNumberToSink(myNum);
+    // untuk pengujian error: uncomment baris berikut untuk memancarkan error
+    // numberStream.addError();
   }
 
   @override
