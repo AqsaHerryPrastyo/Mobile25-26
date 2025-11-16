@@ -175,7 +175,7 @@ Lakukan running pada aplikasi Flutter Anda, maka akan terlihat berubah warna bac
 Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 Lakukan commit hasil jawaban Soal 4 dengan pesan "W12: Jawaban Soal 4"
 
-![img](/W11/img/Soal4.gif)
+![img](/W12/img/Soal4.gif)
 
 
 ### Langkah 13: Ganti isi method changeColor()
@@ -309,4 +309,18 @@ Jelaskan maksud kode langkah 8 dan 10 tersebut!
 Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 Lalu lakukan commit dengan pesan "W12: Jawaban Soal 6".
 
-![img](/W11/img/Soal6.gif)
+**Soal 6**: Jawaban
+- **Langkah 8 (inisialisasi stream & listener):**
+  - `numberStream = NumberStream();` membuat instance `NumberStream` yang menyimpan sebuah `StreamController<int>`; controller ini menjadi sumber event (angka) yang akan dipancarkan.
+  - `numberStreamController = numberStream.controller;` mengambil referensi controller agar bisa mengakses `stream` dan/atau `sink` jika perlu.
+  - `Stream stream = numberStreamController.stream;` mengambil `Stream<int>` dari controller; ini adalah aliran event yang dapat didengarkan oleh consumer.
+  - `stream.listen((event) { setState(() { lastNumber = event; }); });` mendaftarkan callback yang dipanggil setiap kali ada event baru. Di sini callback memanggil `setState()` untuk menyimpan `event` ke `lastNumber` dan memicu rebuild UI sehingga angka terbaru tampil.
+  - Efek praktis: saat controller menerima nilai melalui `controller.sink.add(value)`, listener akan dipanggil dan UI diperbarui.
+
+- **Langkah 10 (producer: menambah angka acak ke sink):**
+  - `Random random = Random();` membuat generator angka acak.
+  - `int myNum = random.nextInt(10);` menghasilkan bilangan acak 0..9.
+  - `numberStream.addNumberToSink(myNum);` memanggil method pada `NumberStream` yang melakukan `controller.sink.add(newNumber);` — menaruh `myNum` ke sink controller.
+  - Efek praktis: menambahkan nilai ke sink menyebabkan controller meneruskan event ke stream, listener di Langkah 8 menerima event tersebut dan UI diperbarui.
+
+![img](/W12/img/Soal6.gif)
