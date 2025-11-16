@@ -325,22 +325,6 @@ Lalu lakukan commit dengan pesan "W12: Jawaban Soal 6".
 
 ![img](/W12/img/Soal6.gif)
 
-### Langkah 13 - 15 (penjelasan & instruksi)
-
-**Langkah 13**: `addError()` di `NumberStream` — method ini memanggil `controller.sink.addError('error')` untuk memasukkan error ke aliran stream. Berguna untuk menguji penanganan error pada consumer.
-
-**Langkah 14**: Menangani error di listener (`onError`) — di `main.dart` kita menambahkan `.onError((error) { setState(() { lastNumber = -1; }); });` pada `stream.listen(...)` sehingga ketika stream memancarkan error, UI menampilkan `-1` sebagai indikator error.
-
-**Langkah 15**: Mengubah `addRandomNumber()` untuk memancarkan error pada pengujian. Untuk eksperimen, Anda dapat mengomentari pemanggilan `addNumberToSink()` dan memanggil `numberStream.addError()` sehingga setiap tekan tombol akan memicu error yang ditangani oleh `onError`.
-
-Pada implementasi akhir di repository ini, kode dikembalikan ke perilaku normal (menambahkan angka acak ke sink) dan baris `numberStream.addError()` disediakan sebagai komentar agar Anda bisa menguji kapan diperlukan tanpa merusak alur. Jika ingin menguji error, uncomment baris komentar tersebut.
-
-**Soal 7**: Jawaban singkat
-- **Maksud langkah 13-15:** Menambahkan mekanisme untuk memancarkan error dari producer (Langkah 13), menambahkan handler di consumer agar dapat bereaksi terhadap error (Langkah 14), lalu mengganti sementara producer untuk memancarkan error pada pengujian (Langkah 15). Setelah pengujian, kembalikan ke perilaku normal dan biarkan `addError()` tersedia sebagai fungsi test.
-
-File terkait: `stream_herry/lib/stream.dart`, `stream_herry/lib/main.dart`.
-
-Silakan commit README dan kode jika Anda mau; saya tidak akan melakukan commit terakhir untuk Soal 7 kecuali Anda minta saya. (Anda dapat commit dengan pesan `W12: Jawaban Soal 7`).
 
 ### Langkah 13: Buka stream.dart
 Tambahkan method berikut ini.
@@ -379,3 +363,11 @@ numberStream.addError();
 Jelaskan maksud kode langkah 13 sampai 15 tersebut!
 Kembalikan kode seperti semula pada Langkah 15, comment addError() agar Anda dapat melanjutkan ke praktikum 3 berikutnya.
 Lalu lakukan commit dengan pesan "W12: Jawaban Soal 7".
+
+## Langkah 13 - 15 (penjelasan & instruksi)
+
+**Langkah 13**: `addError()` di `NumberStream` — method ini memanggil `controller.sink.addError('error')` untuk memasukkan error ke aliran stream. Berguna untuk menguji penanganan error pada consumer.
+
+**Langkah 14**: Menangani error di listener (`onError`) — di `main.dart` kita menambahkan `.onError((error) { setState(() { lastNumber = -1; }); });` pada `stream.listen(...)` sehingga ketika stream memancarkan error, UI menampilkan `-1` sebagai indikator error.
+
+**Langkah 15**: Mengubah `addRandomNumber()` untuk memancarkan error pada pengujian. Untuk eksperimen, Anda dapat mengomentari pemanggilan `addNumberToSink()` dan memanggil `numberStream.addError()` sehingga setiap tekan tombol akan memicu error yang ditangani oleh `onError`.
