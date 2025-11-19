@@ -682,3 +682,7 @@ Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 Lalu lakukan commit dengan pesan "W12: Jawaban Soal 12".
 
 ![img](/W12/img/soal12.gif)
+
+**Soal 12**: Jawaban
+- **Langkah 3:** `getNumbers()` membuat sebuah `Stream` yang memancarkan angka acak setiap 1 detik menggunakan `Stream.periodic`; `yield*` meneruskan nilai-nilai tersebut keluar dari generator.
+- **Langkah 7:** `StreamBuilder` mendengarkan `numberStream`, menggunakan `snapshot` untuk mengecek `hasData`/`hasError` dan membangun UI—menampilkan `snapshot.data` setiap kali ada event baru.
