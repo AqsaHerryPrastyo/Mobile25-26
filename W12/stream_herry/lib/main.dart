@@ -54,6 +54,7 @@ class StreamHomePageState extends State<StreamHomePage> {
   late StreamController<int> numberStreamController;
   late NumberStream numberStream;
   late StreamTransformer<int, int> transformer;
+  late StreamSubscription<int> subscription;
 
   void changeColor() {
     _sub = colorStream.getColors().listen((eventColor) {
@@ -85,32 +86,59 @@ class StreamHomePageState extends State<StreamHomePage> {
       handleDone: (EventSink<int> sink) => sink.close(),
     );
 
-    // Terapkan transformer sebelum mendengarkan stream.
-    stream.transform(transformer).listen((event) {
+    // Terapkan transformer dan simpan subscription untuk lifecycle control.
+    subscription = stream.transform(transformer).listen((event) {
       setState(() {
         lastNumber = event;
       });
-    }, onError: (error) {
+    });
+
+    // Tambahkan handler onError dan onDone pada subscription.
+    subscription.onError((error) {
       setState(() {
         lastNumber = -1;
       });
+    });
+
+    subscription.onDone(() {
+      // Notifikasi ketika stream selesai/ditutup.
+      // Berguna untuk debugging atau membersihkan state terkait.
+      // ignore: avoid_print
+      print('OnDone was called');
     });
   }
 
   @override
   void dispose() {
+    // cancel color subscription
     _sub.cancel();
-    // close number stream controller
-    numberStream.close();
+    // cancel number subscription
+    subscription.cancel();
+    // close number stream controller if not already closed
+    if (!numberStreamController.isClosed) {
+      numberStream.close();
+    }
     super.dispose();
   }
 
   void addRandomNumber() {
     Random random = Random();
     int myNum = random.nextInt(10);
-    numberStream.addNumberToSink(myNum);
+    if (!numberStreamController.isClosed) {
+      numberStream.addNumberToSink(myNum);
+    } else {
+      setState(() {
+        lastNumber = -1;
+      });
+    }
     // untuk pengujian error: uncomment baris berikut untuk memancarkan error
     // numberStream.addError();
+  }
+
+  void stopStream() {
+    if (!numberStreamController.isClosed) {
+      numberStreamController.close();
+    }
   }
 
   @override
@@ -131,6 +159,10 @@ class StreamHomePageState extends State<StreamHomePage> {
               ElevatedButton(
                 onPressed: () => addRandomNumber(),
                 child: const Text('New Random Number'),
+              ),
+              ElevatedButton(
+                onPressed: () => stopStream(),
+                child: const Text('Stop Subscription'),
               ),
             ],
           ),

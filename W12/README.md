@@ -416,3 +416,94 @@ Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 Lalu lakukan commit dengan pesan "W12: Jawaban Soal 8".
 
 ![img](/W12/img/soal8.gif)
+
+## Praktikum 4: Subscribe ke stream events
+
+### Langkah 1: Tambah variabel
+Tambahkan variabel berikut di class _StreamHomePageState
+~~~Dart
+late StreamSubscription subscription;
+~~~
+### Langkah 2: Edit initState()
+Edit kode seperti berikut ini.
+~~~Dart
+Coverride
+void initState(){
+numberStream = Number Stream);
+number StreamController = numberStream.controller;
+Stream stream = numberStreamController.stream;
+subscription = stream. listen( (event) {
+setState(() {
+lastNumber = event;
+});
+}) ;
+super. initState();
+}
+~~~
+### Langkah 3: Tetap di initState()
+Tambahkan kode berikut ini.
+~~~Dart
+subscription.onErroreror {
+setState(() {
+lastNumber = -1;
+});
+});
+~~~
+
+### Langkah 4: Tambah properti onDone()
+Tambahkan dibawahnya kode ini setelah onError
+~~~Dart
+subscription. onDone (() {
+print('OnDone was called');
+});
+~~~
+
+### Langkah 5: Tambah method baru
+Ketik method ini di dalam class _StreamHomePageState
+~~~Dart
+void stopStream () {
+numberStreamController.close();}
+~~~
+### Langkah 6: Pindah ke method dispose()
+Jika method dispose() belum ada, Anda dapat mengetiknya dan dibuat override. Ketik kode ini didalamnya.
+subscription.cancel();
+
+### Langkah 7: Pindah ke method build()
+Tambahkan button kedua dengan isi kode seperti berikut ini.
+~~~Dart
+ElevatedButton(
+onPressed: () => stopStream),
+child: const Text('Stop Subscription'),
+)
+~~~
+### Langkah 8: Edit method addRandomNumber()
+Edit kode seperti berikut ini.
+~~~Dart
+void addRandomNumber () {
+Random random = Random();
+int myNum = random.nextint(10);
+if (!numberStreamController.isClosed){
+numberStream.addNumberToSink(myNum) ;
+} else {
+setState(() {
+lastNumber = -1;
+}) ;
+}
+}
+~~~
+### Langkah 9: Run
+Anda akan melihat dua button seperti gambar berikut.
+
+### Langkah 10: Tekan button ‘Stop Subscription'
+Anda akan melihat pesan di Debug Console seperti berikut.
+
+### Soal 9
+Jelaskan maksud kode langkah 2, 6 dan 8 tersebut!
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W12: Jawaban Soal 9".
+![img](/W12/img/Soal9.gif)
+
+**Soal 9**: Jawaban
+- **Langkah 2:** Inisialisasi `NumberStream`, ambil `controller` dan `stream`, lalu buat `subscription = stream.listen(...)` untuk mendaftarkan listener yang menerima event angka dan memperbarui UI setiap kali ada event baru.
+- **Langkah 6:** `subscription.cancel()` di `dispose()` membatalkan langganan ketika widget dihancurkan, mencegah memory leak dan menghentikan pemrosesan event lebih lanjut.
+- **Langkah 8:** Pada `addRandomNumber()` dicek `numberStreamController.isClosed` agar tidak menulis ke controller yang sudah ditutup; jika sudah tertutup, UI di-set ke `-1` sebagai indikator bahwa stream tidak lagi menerima event.
