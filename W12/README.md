@@ -371,3 +371,48 @@ Lalu lakukan commit dengan pesan "W12: Jawaban Soal 7".
 **Langkah 14**: Menangani error di listener (`onError`) — di `main.dart` kita menambahkan `.onError((error) { setState(() { lastNumber = -1; }); });` pada `stream.listen(...)` sehingga ketika stream memancarkan error, UI menampilkan `-1` sebagai indikator error.
 
 **Langkah 15**: Mengubah `addRandomNumber()` untuk memancarkan error pada pengujian. Untuk eksperimen, Anda dapat mengomentari pemanggilan `addNumberToSink()` dan memanggil `numberStream.addError()` sehingga setiap tekan tombol akan memicu error yang ditangani oleh `onError`.
+
+## Praktikum 3: Injeksi data ke streams
+
+### Langkah 1: Buka main.dart
+Tambahkan variabel baru di dalam class _StreamHomePageState
+~~~Dart
+late StreamTransformer transformer;
+~~~
+
+### Langkah 2: Tambahkan kode ini di initState
+~~~Dart
+transformer = StreamTransformer<int, int>.fromHandlers(
+handleData: (value, sink) {
+sink. add(value * 10);}
+handleError: (error, trace, sink) {
+sink.add (-1);}
+handleDone: (sink) = sink.close());
+~~~
+
+### Langkah 3: Tetap di initState
+Lakukan edit seperti kode berikut.
+~~~Dart
+stream. transform(transformer). listen((event) {
+setState(() {
+lastNumber = event;
+});
+}). onError((error) {
+setState(() {
+lastNumber = -1;
+}) ;
+});
+super.initState();
+~~~
+
+### Langkah 4: Run
+
+### Soal 8
+#### Jelaskan maksud kode langkah 1-3 tersebut!
+
+Deklarasi late StreamTransformer<int,int> transformer; menyiapkan variabel yang akan diisi nanti dengan transformer; di initState() transformer dibuat dengan StreamTransformer.fromHandlers yang mendefinisikan tiga handler: handleData mengubah tiap nilai masuk dengan mengalikan 10 lalu mengirimkannya ke sink (mis. 3 → 30), handleError menangani error dari source dengan mengubahnya menjadi data sentinel -1 (sehingga consumer menerima -1 bukannya exception), dan handleDone menutup sink saat stream sumber selesai; lalu transformer diterapkan ke stream dengan stream.transform(transformer).listen(...), sehingga listener menerima nilai yang sudah diproses oleh transformer (nilai dikali 10 atau -1 jika ada error). Perlu dicatat bahwa jika handleError mengubah error menjadi data, callback .onError(...) pada listener biasanya tidak dipanggil (jadi bisa jadi redundant), dan sebaiknya simpan StreamSubscription dari listen() lalu batalkan di dispose() untuk mencegah memory leak.
+
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W12: Jawaban Soal 8".
+
+![img](/W12/img/soal8.gif)
