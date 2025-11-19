@@ -55,6 +55,8 @@ class StreamHomePageState extends State<StreamHomePage> {
   late NumberStream numberStream;
   late StreamTransformer<int, int> transformer;
   late StreamSubscription<int> subscription;
+  late StreamSubscription<int> subscription2;
+  String values = '';
 
   void changeColor() {
     _sub = colorStream.getColors().listen((eventColor) {
@@ -73,6 +75,8 @@ class StreamHomePageState extends State<StreamHomePage> {
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
     Stream<int> stream = numberStreamController.stream;
+    // ubah menjadi broadcast agar bisa didengarkan oleh banyak subscriber
+    Stream<int> broadcast = stream.asBroadcastStream();
 
     // Praktikum 3: buat transformer yang mengalikan nilai dengan 10,
     // menangani error dengan mengirim -1, dan menutup sink saat done.
@@ -87,9 +91,17 @@ class StreamHomePageState extends State<StreamHomePage> {
     );
 
     // Terapkan transformer dan simpan subscription untuk lifecycle control.
-    subscription = stream.transform(transformer).listen((event) {
+    subscription = broadcast.transform(transformer).listen((event) {
       setState(() {
         lastNumber = event;
+      });
+    });
+
+    // Tambah subscription kedua untuk menunjukkan multiple subscriptions
+    subscription2 = broadcast.transform(transformer).listen((event) {
+      setState(() {
+        // append numeric marker for each event received by subscription2
+        values += '${event.toString()}-';
       });
     });
 
@@ -114,6 +126,8 @@ class StreamHomePageState extends State<StreamHomePage> {
     _sub.cancel();
     // cancel number subscription
     subscription.cancel();
+    // cancel second subscription
+    subscription2.cancel();
     // close number stream controller if not already closed
     if (!numberStreamController.isClosed) {
       numberStream.close();
@@ -156,13 +170,21 @@ class StreamHomePageState extends State<StreamHomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(lastNumber.toString(), style: const TextStyle(fontSize: 48, color: Colors.white)),
+              // show accumulated numeric markers from subscription2
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(values, style: const TextStyle(color: Colors.black)),
+                ),
+              ),
               ElevatedButton(
                 onPressed: () => addRandomNumber(),
                 child: const Text('New Random Number'),
               ),
               ElevatedButton(
                 onPressed: () => stopStream(),
-                child: const Text('Stop Subscription'),
+                child: const Text('Stop Stream'),
               ),
             ],
           ),
