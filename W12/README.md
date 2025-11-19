@@ -686,3 +686,127 @@ Lalu lakukan commit dengan pesan "W12: Jawaban Soal 12".
 **Soal 12**: Jawaban
 - **Langkah 3:** `getNumbers()` membuat sebuah `Stream` yang memancarkan angka acak setiap 1 detik menggunakan `Stream.periodic`; `yield*` meneruskan nilai-nilai tersebut keluar dari generator.
 - **Langkah 7:** `StreamBuilder` mendengarkan `numberStream`, menggunakan `snapshot` untuk mengecek `hasData`/`hasError` dan membangun UI—menampilkan `snapshot.data` setiap kali ada event baru.
+
+
+## Praktikum 7: BLoC Pattern
+
+### Langkah 1: Buat Project baru
+Buatlah sebuah project flutter baru dengan nama bloc_random_nama (beri nama panggilan Anda) di folder week-12/src/ repository GitHub Anda. Lalu buat file baru di folder lib dengan nama random_bloc.dart
+
+### Langkah 2: Isi kode random_bloc.dart
+Ketik kode impor berikut ini.
+~~~dart
+import 'dart: async';
+import 'dart:math;
+~~~
+### Langkah 3: Buat class RandomNumberBloc()
+class RandomNumberBloc{}
+
+### Langkah 4: Buat variabel StreamController
+Di dalam class RandomNumberBloc() ketik variabel berikut ini
+~~~dart
+final _generateRandomController = StreamController<void>(;
+final _randomNumberController = StreamController<int>();
+Sink<void› get generateRandom => _generateRandomController.sink;
+Stream<int> get randomNumber => _randomNumberController.stream;
+_secondsStreamController.sink;
+~~~
+
+### Langkah 5: Buat constructor
+~~~dart
+RandomNumberBloc() {
+_generateRandomController.stream.listen((_) {
+final random = Random().nextInt(10);
+_randomNumberController.sink.add(random);
+});
+}
+~~~
+### Langkah 6: Buat method dispose()
+~~~dart
+void dispose() {
+_generateRandomController.close();
+_randomNumberController.close();
+}
+~~~
+### Langkah 7: Edit main.dart
+~~~dart
+class MyApp extends StatelessWidget {
+const MyApp({super.key});
+@override
+Widget build (BuildContext context) {
+return MaterialApp(
+title: 'Flutter Demo',
+theme: ThemeData(
+primarySwatch: Colors.blue,
+),
+home: const RandomScreen(),
+);
+}
+}
+~~~
+### Langkah 8: Buat file baru random_screen.dart
+Di dalam folder lib project Anda, buatlah file baru ini.
+
+### Langkah 9: Lakukan impor material dan random_bloc.dart
+Ketik kode ini di file baru random_screen.dart
+~~~dart
+import 'package:flutter/material.dart';
+import 'random_bloc.dart';
+~~~
+
+### Langkah 10: Buat StatefulWidget RandomScreen
+Buatlah di dalam file random_screen.dart
+
+### Langkah 11: Buat variabel
+Ketik kode ini di dalam class _RandomScreenState
+~~~dart
+final _bloc = RandomNumberBloc();
+~~~
+
+### Langkah 12: Buat method dispose()
+Ketik kode ini di dalam class _StreamHomePageState
+~~~dart
+Coverride
+void dispose () {
+_bloc.dispose();
+super dispose ();
+}
+~~~
+
+### Langkah 13: Edit method build()
+Ketik kode ini di dalam class _StreamHomePageState
+~~~dart
+@override
+Widget build (BuildContext context) {
+return Scaffold(
+appBar: AppBar(title: const Text('Random Number')),
+body: Center (
+child: StreamBuilder<int>(
+stream: _bloc.randomNumber,
+initialData: 0,
+builder: (context, snapshot) {
+return Text(
+'Random Number: ${snapshot.data}',
+style: const TextStyle(fontSize: 24),
+);
+},
+),
+),
+floatingActionButton: FloatingActionButton(
+onPressed: () => _bloc.generateRandom.add(null),
+child: const Icon(Icons.refresh),
+),
+);
+},
+~~~
+
+### Soal 13
+Jelaskan maksud praktikum ini ! Dimanakah letak konsep pola BLoC-nya ?
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W12: Jawaban Soal 13".
+
+![img](/W12/img/soal13.gif)
+
+**Soal 13**: Jawaban
+- **Maksud praktikum:** Membangun BLoC sederhana yang memisahkan logika produksi angka acak dari UI. UI hanya mengirim event (trigger) ke BLoC dan mendengarkan stream untuk menerima state (angka) yang kemudian ditampilkan.
+- **Letak pola BLoC:** Konsep BLoC ada di file `lib/random_bloc.dart` — ada input `generateRandom` (sink) sebagai event dan output `randomNumber` (stream) sebagai state; UI (`random_screen.dart`) hanya berinteraksi lewat sink/stream.
