@@ -53,6 +53,7 @@ class StreamHomePageState extends State<StreamHomePage> {
   int lastNumber = 0;
   late StreamController<int> numberStreamController;
   late NumberStream numberStream;
+  late StreamTransformer<int, int> transformer;
 
   void changeColor() {
     _sub = colorStream.getColors().listen((eventColor) {
@@ -71,11 +72,25 @@ class StreamHomePageState extends State<StreamHomePage> {
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
     Stream<int> stream = numberStreamController.stream;
-    stream.listen((event) {
+
+    // Praktikum 3: buat transformer yang mengalikan nilai dengan 10,
+    // menangani error dengan mengirim -1, dan menutup sink saat done.
+    transformer = StreamTransformer<int, int>.fromHandlers(
+      handleData: (value, EventSink<int> sink) {
+        sink.add(value * 10);
+      },
+      handleError: (error, stackTrace, EventSink<int> sink) {
+        sink.add(-1);
+      },
+      handleDone: (EventSink<int> sink) => sink.close(),
+    );
+
+    // Terapkan transformer sebelum mendengarkan stream.
+    stream.transform(transformer).listen((event) {
       setState(() {
         lastNumber = event;
       });
-    }).onError((error) {
+    }, onError: (error) {
       setState(() {
         lastNumber = -1;
       });
