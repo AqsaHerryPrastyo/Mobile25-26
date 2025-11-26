@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     readJsonFile().then((value) {
       setState(() {
-        myPizzas = value ?? [];
+        myPizzas = value;
       });
     }).catchError((err) {
       // If loading/parsing fails, keep an empty list and log the error.
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<List<Pizza>?> readJsonFile() async {
+  Future<List<Pizza>> readJsonFile() async {
     try {
       final String myString = await rootBundle.loadString('assets/pizzalist.json');
       if (myString.trim().isEmpty) return [];
@@ -86,11 +86,22 @@ class _MyHomePageState extends State<MyHomePage> {
       for (var pizzaMap in pizzaMapList) {
         pizzas.add(Pizza.fromJson(Map<String, dynamic>.from(pizzaMap)));
       }
+      // Convert back to JSON string and print (practicum step)
+      try {
+        final String jsonOut = convertToJSON(pizzas);
+        debugPrint('Converted JSON: $jsonOut');
+      } catch (e) {
+        debugPrint('Error converting pizzas to JSON: $e');
+      }
       return pizzas;
     } catch (e) {
       debugPrint('readJsonFile error: $e');
       return [];
     }
+  }
+
+  String convertToJSON(List<Pizza> pizzas) {
+    return jsonEncode(pizzas.map((p) => p.toJson()).toList());
   }
 
   void _incrementCounter() {
