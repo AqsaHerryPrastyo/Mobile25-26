@@ -127,6 +127,7 @@ Jika kode sudah benar
 ### Soal 2
 Masukkan hasil capture layar ke laporan praktikum Anda.
 Lakukan commit hasil jawaban Soal 2 dengan pesan "W13: Jawaban Soal 2"
+![img](/W13/img/Soal2.png)
 
 ### Langkah 11: Buat file baru pizza.dart
 Kita ingin mengubah data json tersebut dari String menjadi objek List. Maka perlu membuat file class baru di folder lib/model dengan nama file pizza.dart.
@@ -225,3 +226,41 @@ Jalankan aplikasi. Sekarang, Anda akan melihat data pizza ditampilkan dalam daft
 ### Soal 3
 Masukkan hasil capture layar ke laporan praktikum Anda.
 Lakukan commit hasil jawaban Soal 2 dengan pesan "W13: Jawaban Soal 3"
+
+![img](/W13/img/Soal3.png)
+
+### Langkah 23: Tambahkan Method toJson() (Serialization)
+Di file pizza.dart, tambahkan method toJson() ke class Pizza. Method ini berfungsi untuk mengonversi objek Dart kembali menjadi Map (langkah pertama menuju JSON String).
+~~~dart
+Map<String, dynamic> toJson() {
+return {
+'id': id,
+'pizzaName': pizzaName,
+'description': description,
+'price': price,
+'imageUrl': imageUrl,
+};
+}
+~~~
+
+### Langkah 24: Buat Fungsi Konversi JSON String
+Di main.dart, tambahkan fungsi convertToJSON di dalam _MyHomePageState untuk menggunakan jsonEncode (dari dart:convert) yang mengubah List objek Dart menjadi JSON String.
+~~~dart
+String convertToJSON(List<Pizza> pizzas) {
+return jsonEncode(pizzas.map((pizza) =>
+jsonEncode(pizza)).
+toList());
+}
+~~~
+### Langkah 25: Tampilkan Output JSON di Konsol
+Di method readJsonFile(), tambahkan kode untuk memanggil convertToJSON dan mencetak hasilnya ke Debug Console sebelum mengembalikan myPizzas.
+```dart
+String json = convertToJSON(myPizzas);
+print(json);
+return myPizzas;
+```
+### Langkah 26: Cek Output Konsol
+Jalankan aplikasi. Periksa Debug Console untuk melihat List objek Pizza telah berhasil dikonversi kembali menjadi JSON String.
+
+
+
