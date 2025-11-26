@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'model/pizza.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,20 +57,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  String pizzastring = '';
+  List<Pizza> myPizzas = [];
 
   @override
   void initState() {
     super.initState();
-    readJsonFile();
+    readJsonFile().then((value) {
+      setState(() {
+        myPizzas = value;
+      });
+    });
   }
 
-  Future<void> readJsonFile() async {
+  Future<List<Pizza>> readJsonFile() async {
     String myString = await DefaultAssetBundle.of(context)
         .loadString('assets/pizzalist.json');
-    setState(() {
-      pizzastring = myString;
-    });
+    List<dynamic> pizzaMapList = jsonDecode(myString);
+    List<Pizza> pizzas = [];
+    for (var pizzaMap in pizzaMapList) {
+      pizzas.add(Pizza.fromJson(Map<String, dynamic>.from(pizzaMap)));
+    }
+    return pizzas;
   }
 
   void _incrementCounter() {
@@ -100,14 +109,19 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(pizzastring.isEmpty ? 'Loading JSON...' : pizzastring),
-          ),
-        ),
-      ),
+      body: myPizzas.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: myPizzas.length,
+              itemBuilder: (context, index) {
+                final pizza = myPizzas[index];
+                return ListTile(
+                  title: Text(pizza.pizzaName),
+                  subtitle: Text(pizza.description),
+                  trailing: Text('\$${pizza.price.toStringAsFixed(2)}'),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
