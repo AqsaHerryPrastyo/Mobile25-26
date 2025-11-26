@@ -41,10 +41,10 @@ Tambahkan nama panggilan Anda pada title app sebagai identitas hasil pekerjaan A
 Gantilah warna tema aplikasi sesuai kesukaan Anda.
 Lakukan commit hasil jawaban Soal 1 dengan pesan "W13: Jawaban Soal 1"
 
-Langkah 3: Buat folder baru assets
+### Langkah 3: Buat folder baru assets
 Buat folder baru assets di root project Anda
 
-Langkah 4: Buat file baru pizzalist.json
+### Langkah 4: Buat file baru pizzalist.json
 Letakkan file ini di dalam folder assets, lalu salin data JSON berikut ke file tersebut.
 ~~~Dart
 [ 
@@ -88,16 +88,16 @@ Letakkan file ini di dalam folder assets, lalu salin data JSON berikut ke file t
 
 Jika Anda ingin menggunakan data JSON yang lain, Anda dapat mengakses salah satu dari daftar API di tautan ini: https://github.com/public-apis/public-apis
 
-Langkah 5: Edit pubspec.yaml
+### Langkah 5: Edit pubspec.yaml
 Tambahkan referensi folder assets ke file pubspec.yaml seperti berikut ini.
 assets:
 " - assets/
 
-Langkah 6: Edit maint.dart
+### Langkah 6: Edit maint.dart
 Buatlah variabel seperti berikut ini class _MyHomePageState.
 String pizzastring = '';
 
-Langkah 7: Tetap di main.dart
+### Langkah 7: Tetap di main.dart
 Untuk membaca isi dari file pizzalist.json di dalam class _MyHomePageState, tambahkan method readJsonFile seperti kode berikut untuk membaca file json.
 ~~~dart
 Future readJsonfile() async {l
@@ -109,10 +109,21 @@ pizzastring = myString;
 }
 ~~~
 
-Langkah 8: Panggil method readJsonFile
+### Langkah 8: Panggil method readJsonFile
 Panggil method readJsonFile di initState
 ~~~dart
 coverride
 void initState() { super. initState() ;
 readJsonFile();}
 ~~~
+
+### Langkah 9: Tampilkan hasil JSON
+Kemudian tampilkan hasil JSON di body scaffold.
+body: Text (pizzaString),
+
+### Langkah 10: Run
+Jika kode sudah benar
+
+### Soal 2
+Masukkan hasil capture layar ke laporan praktikum Anda.
+Lakukan commit hasil jawaban Soal 2 dengan pesan "W13: Jawaban Soal 2"
