@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'model/pizza.dart';
 
 void main() {
@@ -64,20 +65,32 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     readJsonFile().then((value) {
       setState(() {
-        myPizzas = value;
+        myPizzas = value ?? [];
+      });
+    }).catchError((err) {
+      // If loading/parsing fails, keep an empty list and log the error.
+      // This prevents calling `.isEmpty` on an undefined value at runtime.
+      debugPrint('Error loading pizzas: $err');
+      setState(() {
+        myPizzas = [];
       });
     });
   }
 
-  Future<List<Pizza>> readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context)
-        .loadString('assets/pizzalist.json');
-    List<dynamic> pizzaMapList = jsonDecode(myString);
-    List<Pizza> pizzas = [];
-    for (var pizzaMap in pizzaMapList) {
-      pizzas.add(Pizza.fromJson(Map<String, dynamic>.from(pizzaMap)));
+  Future<List<Pizza>?> readJsonFile() async {
+    try {
+      final String myString = await rootBundle.loadString('assets/pizzalist.json');
+      if (myString.trim().isEmpty) return [];
+      final List<dynamic> pizzaMapList = jsonDecode(myString);
+      final List<Pizza> pizzas = [];
+      for (var pizzaMap in pizzaMapList) {
+        pizzas.add(Pizza.fromJson(Map<String, dynamic>.from(pizzaMap)));
+      }
+      return pizzas;
+    } catch (e) {
+      debugPrint('readJsonFile error: $e');
+      return [];
     }
-    return pizzas;
   }
 
   void _incrementCounter() {
