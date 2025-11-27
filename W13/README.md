@@ -262,5 +262,129 @@ return myPizzas;
 ### Langkah 26: Cek Output Konsol
 Jalankan aplikasi. Periksa Debug Console untuk melihat List objek Pizza telah berhasil dikonversi kembali menjadi JSON String.
 
+## Praktikum 2: Handle kompatibilitas data JSON
 
+Pada codelab ini, kita akan berfokus pada skema JSON yang tidak kompatibel dengan model yang telah kita buat sebelumnya. Kita akan membuat kode lebih tangguh dengan menangani type casting dan nilai null.
+Catatan: Langkah-langkah ini mensimulasikan penggunaan data JSON yang tidak konsisten atau "rusak" (pizzalist_broken.json).
+
+### Langkah 1: Simulasikan Error
+Anggaplah Anda telah mengganti file pizzalist.json dengan data yang tidak konsisten.
+
+### Langkah 2: Lihat Error Tipe Data String ke Int
+Jika ID pizza di JSON dikirim sebagai String (misalnya "id": "1" di JSON) sementara model Dart mengharapkan int, Anda akan melihat runtime error.
+
+### Langkah 3: Terapkan tryParse dan Null Coalescing pada ID
+Di Pizza.fromJson (file pizza.dart), ganti cara mendapatkan nilai id menggunakan int.tryParse dan null coalescing operator (??) untuk memberikan nilai default 0 jika parsing gagal atau nilainya null. Tujuannya adalah memastikan nilai id selalu integer.
+int.tryParse(json['id'].toString()) id'].toString())?? 0;
+
+### angkah 4: Simulasikan Error Null pada String
+Jika Anda menjalankan ulang dan ada bidang yang hilang (misalnya imageUrl hilang), Anda mungkin mendapatkan error Null.
+
+### Langkah 5: Terapkan Null Coalescing pada String
+Tambahkan null coalescing operator (??) pada imageUrl untuk memberikan string kosong ('') jika nilai yang diterima adalah null. Lakukan hal yang sama untuk bidang String lainnya seperti pizzaName dan description jika perlu.
+
+### Langkah 6: Gunakan toString() untuk Field String
+Untuk memastikan semua nilai yang digunakan sebagai String benar-benar String (bahkan jika mereka mungkin dikirim sebagai int atau tipe lain), gunakan toString().
+
+
+### Langkah 7: Simulasikan Error Tipe Data String ke Double
+Jika Anda menjalankan ulang, Anda mungkin menemukan error saat mengonversi String ke Double untuk bidang price.
+
+### Langkah 8: Terapkan double.tryParse
+Terapkan double.tryParse dengan null coalescing (?? 0) untuk bidang price, sama seperti yang Anda lakukan pada id.
+~~~dart
+Pizza.fromJson(Map<String, dynamic> json) {
+id = int.tryParse(json['id'].toString());
+pizzaName = json['pizzaName').toString();
+description = json['description').toString();
+price = double.tryParse(json['price'].toString()) ?? 0;
+imageUrl = json['imageUrl'].toString();
+}
+~~~
+
+### Langkah 9: Run dan Perhatikan Output Null
+Setelah mengimplementasikan semua perbaikan tipe data, aplikasi akan berjalan, tetapi mungkin menampilkan "null" di UI jika ada bidang yang hilang atau gagal diparsing (seperti pizzaName atau description).
+
+Langkah 10: Tambahkan Operator Ternary untuk Output User-Friendly
+Perbaiki masalah tampilan "null" dengan menambahkan operator ternary yang memeriksa apakah nilai null sebelum mengubahnya menjadi String. Jika null, berikan nilai pengganti yang ramah pengguna seperti 'No name' atau string kosong ('').
+~~~dart
+Pizza.fromJson(Map<String, dynamic> json) {
+id = int.tryParse(json['id'].toString()) ?? 0;
+pizzaName = json['pizzaName'] != null ? json['pizzaName'].
+toString(): 'No name';
+description =
+(json['description'] != null) ? json['description'].
+toString(): '';
+price = double.tryParse(json['price'].toString()) ?? 0;
+imageUrl = json['imageUrl'] ?? '';}
+~~~
+
+### Langkah 11: Run
+Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan baik, dan UI tidak menampilkan nilai null.
+
+### Soal 4
+Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 4".
+![img](/W13/img/Soal4.png)
+
+## Praktikum 3: Menangani error JSON
+
+Pada praktikum 3 ini, Anda akan berfokus pada Catching common JSON errors, yaitu dengan mengganti string literals (nama kunci JSON) dengan konstanta untuk menghindari error yang sulit di-debug (kesalahan pengetikan).
+Setelah Anda menyelesaikan praktikum 2, Anda dapat melanjutkan praktikum 3 ini.
+
+### Langkah 1: Buka pizza.dart dan Buat Konstanta
+Di bagian atas file pizza.dart, di luar class Pizza, deklarasikan konstanta untuk setiap kunci JSON.
+~~~dart
+const keyId = 'id';
+const keyName = 'pizzaName';
+const keyDescription = 'description";
+const keyPrice = 'price';
+const key Image = imageUrl';
+~~~
+
+### Langkah 2: Perbarui fromJson() menggunakan Konstanta
+Di constructor Pizza.fromJson, ganti semua string literal kunci JSON (misalnya 'id') dengan konstanta yang sesuai (keyId).
+~~~dart
+Pizza.fromJson(Map<String, dynamic> json) {
+id = int.tryParse(json[keyId).toString()) ?? 0;
+pizzaName =
+json [keyName] != null ? json[keyName].toString(): 'No
+name';
+description =
+(json[keyDescription] != null)? json[keyDescription].
+toString():;
+price = double.tryParse(json[keyPrice).toString()) ?? 0;
+imageUrl = json[keyImage] ?? '';}
+~~~
+
+Catatan: Konstruktor ini menggunakan sintaks inisialisasi, tetapi untuk kesederhanaan, kita menggunakan sintaks body.
+
+### Langkah 3: Perbarui toJson() menggunakan Konstanta
+Perbarui juga method toJson() agar menggunakan konstanta yang sama.
+~~~dart
+Map<String, dynamic> toJson() {
+return {
+keyId: id,
+keyName: pizzaName,
+keyDescription: description,
+keyPrice: price,
+keyImage: imageUrl, };
+}
+~~~
+
+### Langkah 4: Run
+Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih safe dan maintainable.
+
+### Soal 5
+Jelaskan maksud kode lebih safe dan maintainable!
+Capture hasil praktikum Anda dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 5".
+
+**Jawaban Soal 5 — Mengapa kode menjadi lebih safe & maintainable**
+- **Menghindari typo pada key JSON:** Dengan mendefinisikan konstanta kunci (mis. `keyId`, `keyName`) kita mengurangi kemungkinan salah ketik yang sulit dilacak. Jika ada perubahan nama kunci, cukup ubah di satu tempat.
+- **Centralized schema:** Konstanta berfungsi sebagai dokumentasi singkat untuk struktur JSON yang diharapkan, memudahkan developer lain memahami format data.
+- **Refactor-friendly:** Ketika kunci berubah pada API, refactor menjadi cepat dan aman karena compiler akan menunjukkan penggunaan konstanta yang perlu di-update.
+- **Mengurangi bug runtime:** Mengganti literal string dengan konstanta mengurangi kelas bug yang muncul hanya saat runtime (mis. `json['descripton']`) sehingga kode lebih andal.
+- **Mempermudah testing:** Konstanta memungkinkan test yang lebih eksplisit (mis. referensi konstan di test), dan meminimalkan duplikasi string di seluruh kode.
+![img](/W13/img/Soal4.png)
 
