@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'model/pizza.dart';
 
 void main() {
@@ -59,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   List<Pizza> myPizzas = [];
+  int appCounter = 0;
 
   @override
   void initState() {
@@ -75,6 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
         myPizzas = [];
       });
     });
+    // Praktikum 4: read and increment app open counter
+    readAndWritePreference();
   }
 
   Future<List<Pizza>> readJsonFile() async {
@@ -97,6 +101,46 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       debugPrint('readJsonFile error: $e');
       return [];
+    }
+  }
+
+  // Praktikum 4: SharedPreferences read/increment
+  Future<void> readAndWritePreference() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      int count = prefs.getInt('appCounter') ?? 0;
+      count++;
+      await prefs.setInt('appCounter', count);
+      setState(() {
+        appCounter = count;
+      });
+    } catch (e) {
+      debugPrint('SharedPreferences error: $e');
+    }
+  }
+
+  Future<void> resetCounter() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('appCounter', 0);
+      setState(() {
+        appCounter = 0;
+      });
+    } catch (e) {
+      debugPrint('SharedPreferences error (reset): $e');
+    }
+  }
+
+  // Praktikum 4: delete all preferences (uses prefs.clear()) and reset counter
+  Future<void> deletePreference() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      setState(() {
+        appCounter = 0;
+      });
+    } catch (e) {
+      debugPrint('SharedPreferences error (delete): $e');
     }
   }
 
@@ -133,24 +177,21 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: myPizzas.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: myPizzas.length,
-              itemBuilder: (context, index) {
-                final pizza = myPizzas[index];
-                // User-friendly display: use values from model; model now
-                // supplies defaults (No name, empty desc, 0.0 price) so UI
-                // can show a clean view without 'null' strings.
-                final titleText = pizza.pizzaName ?? 'No name';
-                final descText = (pizza.description ?? '').isNotEmpty ? pizza.description! : 'No description';
-                final priceText = '€ ${((pizza.price ?? 0.0)).toStringAsFixed(2)}';
-                return ListTile(
-                  title: Text(titleText),
-                  subtitle: Text('$descText - $priceText'),
-                );
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('You have opened the app $appCounter times.'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                await deletePreference();
               },
+              child: const Text('Reset counter'),
             ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
