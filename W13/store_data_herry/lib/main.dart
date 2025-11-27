@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo - Herry',
+      title: 'JSON',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const MyHomePage(title: 'Herry Home Page'),
+      home: const MyHomePage(title: 'JSON'),
     );
   }
 }
@@ -139,10 +139,15 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: myPizzas.length,
               itemBuilder: (context, index) {
                 final pizza = myPizzas[index];
+                // User-friendly display: use values from model; model now
+                // supplies defaults (No name, empty desc, 0.0 price) so UI
+                // can show a clean view without 'null' strings.
+                final titleText = pizza.pizzaName ?? 'No name';
+                final descText = (pizza.description ?? '').isNotEmpty ? pizza.description! : 'No description';
+                final priceText = '€ ${((pizza.price ?? 0.0)).toStringAsFixed(2)}';
                 return ListTile(
-                  title: Text(pizza.pizzaName),
-                  subtitle: Text(pizza.description),
-                  trailing: Text('\$${pizza.price.toStringAsFixed(2)}'),
+                  title: Text(titleText),
+                  subtitle: Text('$descText - $priceText'),
                 );
               },
             ),
