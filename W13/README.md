@@ -551,3 +551,91 @@ Jalankan aplikasi. Anda akan melihat path absolut ke direktori dokumen dan cache
 Capture hasil praktikum Anda dan lampirkan di README.
 Lalu lakukan commit dengan pesan "W13: Jawaban Soal 7".
 ![img](/W13/img/Soal7.png)
+
+## Praktikum 6: Akses filesystem dengan direktori
+
+Praktikum ini melanjutkan dari Praktikum 5, berfokus pada akses file system untuk mengakses directories, menggunakan library dart:io untuk operasi file.
+
+Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini.
+
+### Langkah 1: Lakukan Import dart:io
+Di file main.dart, tambahkan import untuk pustaka dart:io.
+import 'dart:io';
+
+### angkah 2: Tambahkan Variabel File dan Text
+Di State class, tambahkan variabel myFile (dengan modifier late) dan fileText untuk menyimpan konten yang akan dibaca.
+late File myfile;
+String fileText=';
+
+### Langkah 3: Buat Method writeFile()
+Buat method asinkron writeFile() yang menggunakan myFile.writeAsString() untuk menulis konten ke file. Kata ‘Margherita, Capricciosa, Napoli' silakan Anda ganti dengan Nama Lengkap dan NIM Anda.
+~~~dart
+Future<bool> writeFile() async {
+  try {
+    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+~~~
+### Langkah 4: Inisialisasi File dan Panggil writeFile() di initState()
+Perbarui initState(): setelah getPaths() selesai, inisialisasi myFile dengan jalur lengkap di direktori dokumen, dan panggil writeFile().
+~~~dart
+@override
+void initState() {
+getPaths(). then(_) {
+myFile = File('SdocumentsPath/pizzas.txt');
+writeFile();
+});
+super. initState();}
+~~~
+
+### Langkah 5: Buat Method readFile()
+Buat method asinkron readFile() yang menggunakan myFile.readAsString() untuk membaca konten file dan memperbarui fileText melalui setState().
+~~~dart
+Future bool> readfile() async {
+try {
+// Read the file.
+String fileContent = await myFile. readAsString() ;
+setState(() {
+fileText = fileContent;
+});
+return true;
+} catch (e) { I On error, return false.
+return false;}}
+~~~
+
+### Langkah 6: Edit build() dan Tambahkan Tombol Baca
+Di method build(), tambahkan ElevatedButton yang memanggil readFile() dan Text yang menampilkan fileText di bawahnya.
+children: [ Text('Doc path: + documentsPath),
+Text('Temp path' + tempPath),
+ElevatedButton( child: const Text('Read File'),
+onPressed: () => readFile(),
+),
+Text (fileText),]
+
+### Langkah 7: Run
+Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Margherita, Capricciosa, Napoli) akan ditampilkan atau sesuai nama dan NIM Anda.
+
+### Soal 8
+Jelaskan maksud kode pada langkah 3 dan 7 !
+ 
+**Jawaban Soal 8**
+- **Langkah 3 (writeFile)**: Method `writeFile()` menggunakan API `dart:io` untuk menulis sebuah string ke file pada direktori dokumen aplikasi (`myFile.writeAsString(...)`). Fungsi ini:
+  - Membuat/menimpa file `pizzas.txt` di `documentsPath` dengan konten yang ditentukan (contoh: "Margherita, Capricciosa, Napoli").
+  - Menggunakan try/catch untuk menangani error I/O dan mengembalikan `true` jika berhasil atau `false` jika terjadi kesalahan.
+  - Tujuannya adalah menyimpan data sederhana ke file lokal agar dapat dibaca kembali nanti.
+
+- **Langkah 7 (Run / verifikasi)**: Pada langkah "Run" kita menjalankan aplikasi agar semua kode inisialisasi dan metode I/O dieksekusi. Secara praktis:
+  - `initState()` memanggil `getPaths()` untuk mendapatkan `documentsPath`, kemudian menginisialisasi `myFile` dan memanggil `writeFile()` — sehingga file dibuat saat aplikasi mulai.
+  - Setelah aplikasi berjalan, menekan tombol `Read File` memanggil `readFile()` yang membaca isi `pizzas.txt` dan menampilkannya pada UI (variabel `fileText`).
+  - Langkah "Run" berguna untuk memverifikasi bahwa penulisan dan pembacaan file bekerja di perangkat target (simulator atau perangkat fisik) dan untuk melihat hasil pada layar.
+
+Contoh output yang diharapkan setelah menjalankan dan menekan `Read File`:
+- Jika sukses: ditampilkan `Margherita, Capricciosa, Napoli` (atau teks yang Anda tulis ke file).
+- Jika gagal/berkas tidak ditemukan: muncul pesan `File not found: <path>` atau pesan error pada console.
+
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 8".
+![img](/W13/img/Soal8.png)

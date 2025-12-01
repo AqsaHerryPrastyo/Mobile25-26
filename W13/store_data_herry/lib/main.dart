@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/pizza.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -66,6 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int appCounter = 0;
   String documentsPath = '';
   String tempPath = '';
+  // Praktikum 6: file handling
+  late File myFile;
+  String fileText = '';
 
   @override
   void initState() {
@@ -85,7 +89,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // Praktikum 4: read and increment app open counter
     readAndWritePreference();
     // Praktikum 5: get application document and temporary directory paths
-    getPaths();
+    // After paths are available, initialize file and write default content (Praktikum 6)
+    getPaths().then((_) {
+      try {
+        myFile = File('\$documentsPath/pizzas.txt');
+        // write initial content; replace with your full name and NIM if desired
+        writeFile();
+      } catch (e) {
+        debugPrint('Error initializing myFile: $e');
+      }
+    });
   }
 
   // Praktikum 5: obtain documents and temporary directory paths
@@ -165,6 +178,39 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Praktikum 6: write text to a file in application documents directory
+  Future<bool> writeFile() async {
+    try {
+      // Default content — replace with your full name and NIM if required
+      const String content = 'Margherita, Capricciosa, Napoli';
+      await myFile.writeAsString(content);
+      return true;
+    } catch (e) {
+      debugPrint('writeFile error: $e');
+      return false;
+    }
+  }
+
+  // Praktikum 6: read file content and update UI
+  Future<bool> readFile() async {
+    try {
+      if (!await myFile.exists()) {
+        setState(() {
+          fileText = 'File not found: ${myFile.path}';
+        });
+        return false;
+      }
+      final String content = await myFile.readAsString();
+      setState(() {
+        fileText = content;
+      });
+      return true;
+    } catch (e) {
+      debugPrint('readFile error: $e');
+      return false;
+    }
+  }
+
   String convertToJSON(List<Pizza> pizzas) {
     return jsonEncode(pizzas.map((p) => p.toJson()).toList());
   }
@@ -215,6 +261,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Reset counter'),
             ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () async {
+                await readFile();
+              },
+              child: const Text('Read File'),
+            ),
+            const SizedBox(height: 8),
+            Text(fileText),
           ],
         ),
       ),
