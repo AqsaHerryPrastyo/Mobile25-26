@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'model/pizza.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -70,6 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
   // Praktikum 6: file handling
   late File myFile;
   String fileText = '';
+  // Praktikum 7: secure storage
+  final TextEditingController pwdController = TextEditingController();
+  String myPass = '';
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  static const String myKey = 'my_secure_key';
 
   @override
   void initState() {
@@ -178,6 +184,27 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Praktikum 7: write to secure storage
+  Future<void> writeToSecureStorage() async {
+    try {
+      await secureStorage.write(key: myKey, value: pwdController.text);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Value saved securely')));
+    } catch (e) {
+      debugPrint('writeToSecureStorage error: $e');
+    }
+  }
+
+  // Praktikum 7: read from secure storage
+  Future<String> readFromSecureStorage() async {
+    try {
+      final String? v = await secureStorage.read(key: myKey);
+      return v ?? '';
+    } catch (e) {
+      debugPrint('readFromSecureStorage error: $e');
+      return '';
+    }
+  }
+
   // Praktikum 6: write text to a file in application documents directory
   Future<bool> writeFile() async {
     try {
@@ -189,6 +216,12 @@ class _MyHomePageState extends State<MyHomePage> {
       debugPrint('writeFile error: $e');
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    pwdController.dispose();
+    super.dispose();
   }
 
   // Praktikum 6: read file content and update UI
@@ -254,6 +287,42 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('Doc path: $documentsPath', style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 6),
             Text('Temp path: $tempPath', style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 16),
+            // Praktikum 7: secure storage UI
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: TextField(
+                controller: pwdController,
+                decoration: const InputDecoration(
+                  labelText: 'Enter secret value',
+                ),
+                obscureText: true,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    await writeToSecureStorage();
+                  },
+                  child: const Text('Save Value'),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: () async {
+                    final v = await readFromSecureStorage();
+                    setState(() {
+                      myPass = v;
+                    });
+                  },
+                  child: const Text('Read Value'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text('Secure value: $myPass'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
