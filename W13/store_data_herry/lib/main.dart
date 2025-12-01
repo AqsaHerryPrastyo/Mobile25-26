@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/pizza.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,9 +59,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // legacy template counter (not used for praktikum tasks)
+  // kept intentionally for reference; remove if you want to clean lints
   int _counter = 0;
   List<Pizza> myPizzas = [];
   int appCounter = 0;
+  String documentsPath = '';
+  String tempPath = '';
 
   @override
   void initState() {
@@ -79,6 +84,22 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     // Praktikum 4: read and increment app open counter
     readAndWritePreference();
+    // Praktikum 5: get application document and temporary directory paths
+    getPaths();
+  }
+
+  // Praktikum 5: obtain documents and temporary directory paths
+  Future<void> getPaths() async {
+    try {
+      final docDir = await getApplicationDocumentsDirectory();
+      final tempDir = await getTemporaryDirectory();
+      setState(() {
+        documentsPath = docDir.path;
+        tempPath = tempDir.path;
+      });
+    } catch (e) {
+      debugPrint('getPaths error: $e');
+    }
   }
 
   Future<List<Pizza>> readJsonFile() async {
@@ -182,6 +203,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('You have opened the app $appCounter times.'),
+            const SizedBox(height: 12),
+            // Praktikum 5: show paths obtained from path_provider
+            Text('Doc path: $documentsPath', style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 6),
+            Text('Temp path: $tempPath', style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
